@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "title": "First post",
+    "image": "https://radical-mag.com/wp-content/uploads/2025/02/1-bQxfYUIJL-transformed-1-scaled-1-e1738587491781.jpeg",
+    "status": "Activated",
+    "views": 100
+  },
+  {
+    "id": 2,
+    "title": "Second post",
+    "image": "https://imageio.forbes.com/specials-images/imageserve/65e1f436d4eb895a01f161ca/0x0.jpg",
+    "status": "Deactivated",
+    "views": 40
+  },
+  {
+    "id": 3,
+    "title": "Third post",
+    "image": "https://www.carpro.com/hs-fs/hubfs/2023-Chevrolet-Corvette-Z06-credit-chevrolet.jpeg",
+    "status": "Activated",
+    "views": 120
+  },
+  {
+    "id": 1,
+    "title": "First post",
+    "image": "https://radical-mag.com/wp-content/uploads/2025/02/1-bQxfYUIJL-transformed-1-scaled-1-e1738587491781.jpeg",
+    "status": "Activated",
+    "views": 100
+  },
+  {
+    "id": 2,
+    "title": "Second post",
+    "image": "https://imageio.forbes.com/specials-images/imageserve/65e1f436d4eb895a01f161ca/0x0.jpg",
+    "status": "Deactivated",
+    "views": 40
+  },
+  {
+    "id": 3,
+    "title": "Third post",
+    "image": "https://www.carpro.com/hs-fs/hubfs/2023-Chevrolet-Corvette-Z06-credit-chevrolet.jpeg",
+    "status": "Activated",
+    "views": 120
+  },
+  {
+    "id": 1,
+    "title": "First post",
+    "image": "https://radical-mag.com/wp-content/uploads/2025/02/1-bQxfYUIJL-transformed-1-scaled-1-e1738587491781.jpeg",
+    "status": "Activated",
+    "views": 100
+  },
+  {
+    "id": 2,
+    "title": "Second post",
+    "image": "https://imageio.forbes.com/specials-images/imageserve/65e1f436d4eb895a01f161ca/0x0.jpg",
+    "status": "Deactivated",
+    "views": 40
+  },
+  {
+    "id": 3,
+    "title": "Third post",
+    "image": "https://www.carpro.com/hs-fs/hubfs/2023-Chevrolet-Corvette-Z06-credit-chevrolet.jpeg",
+    "status": "Activated",
+    "views": 120
+  }
+]

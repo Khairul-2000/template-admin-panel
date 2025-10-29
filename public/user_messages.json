@@ -1,0 +1,408 @@
+{
+  "community_id": 101,
+  "community_name": "Neural Nexas",
+  "community_profile": "https://pbs.twimg.com/profile_images/1799850120764112896/TAeB4qVV_400x400.jpg",
+  "messages": [
+    {
+      "message_id": 1,
+      "sender": {
+        "id": 1,
+        "full_name": "Shahrukh Khan",
+        "profile": "https://in.bmscdn.com/iedb/artist/images/website/poster/large/shah-rukh-khan-2092-12-09-2017-02-10-43.jpg"
+      },
+      "message": "Hi everyone, are we meeting tomorrow?",
+      "created_at": "2025-07-20T14:25:00Z"
+    },
+        {
+      "message_id": 2,
+      "sender": {
+        "id": 2,
+        "full_name": "Kajol Sharma",
+        "profile": "https://cdn.britannica.com/96/244696-050-E23F34B9/Bollywood-actress-Kajol-2022.jpg"
+      },
+      "message": "Yes, what time works for everyone?",
+      "created_at": "2025-07-20T14:28:00Z"
+    },
+    {
+      "message_id": 3,
+      "sender": {
+        "id": 3,
+        "full_name": "Kajol Aggarwal",
+        "profile": "https://i.pinimg.com/564x/f0/9d/1b/f09d1bc08291466be0b9ad062ef51a2f.jpg"
+      },
+      "message": "Around 3 PM should be fine.",
+      "created_at": "2025-07-20T14:30:00Z"
+    },
+    {
+      "message_id": 4,
+      "sender": {
+        "id": 4,
+        "full_name": "Aamir Khan",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Aamir_Khan.jpg"
+      },
+      "message": "Perfect, 3 PM works for me too.",
+      "created_at": "2025-07-20T14:35:00Z"
+    },
+    {
+      "message_id": 5,
+      "sender": {
+        "id": 5,
+        "full_name": "Deepika Padukone",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Deepika_Padukone_Cannes_2018.jpg"
+      },
+      "message": "Shall we meet at the new café downtown?",
+      "created_at": "2025-07-20T14:40:00Z"
+    },
+    {
+      "message_id": 6,
+      "sender": {
+        "id": 6,
+        "full_name": "Ranbir Kapoor",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Ranbir_Kapoor_promoting_Brahmastra.jpg"
+      },
+      "message": "Great idea, that café has enough space for all of us.",
+      "created_at": "2025-07-20T14:45:00Z"
+    },
+    {
+      "message_id": 7,
+      "sender": {
+        "id": 7,
+        "full_name": "Priyanka Chopra",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Priyanka_Chopra_2016.jpg"
+      },
+      "message": "Awesome, looking forward to it!",
+      "created_at": "2025-07-20T14:50:00Z"
+    },
+    {
+      "message_id": 8,
+      "sender": {
+        "id": 8,
+        "full_name": "Hrithik Roshan",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Hrithik_Roshan_in_2019.jpg"
+      },
+      "message": "Don’t forget to book a table in advance 😅",
+      "created_at": "2025-07-20T14:55:00Z"
+    },
+    {
+      "message_id": 9,
+      "sender": {
+        "id": 2,
+        "full_name": "Kajol Sharma",
+        "profile": "https://cdn.britannica.com/96/244696-050-E23F34B9/Bollywood-actress-Kajol-2022.jpg"
+      },
+      "message": "Good point, I’ll make the reservation.",
+      "created_at": "2025-07-20T15:00:00Z"
+    },
+    {
+      "message_id": 10,
+      "sender": {
+        "id": 1,
+        "full_name": "Shahrukh Khan",
+        "profile": "https://in.bmscdn.com/iedb/artist/images/website/poster/large/shah-rukh-khan-2092-12-09-2017-02-10-43.jpg"
+      },
+      "message": "Thanks Kajol! See you all tomorrow at 3 PM sharp.",
+      "created_at": "2025-07-20T15:05:00Z"
+    },
+    {
+      "message_id": 11,
+      "sender": {
+        "id": 9,
+        "full_name": "Kareena Kapoor",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Kareena_Kapoor_in_2018.jpg"
+      },
+      "message": "I’ll bring some desserts for everyone!",
+      "created_at": "2025-07-20T15:10:00Z"
+    },
+    {
+      "message_id": 12,
+      "sender": {
+        "id": 10,
+        "full_name": "Salman Khan",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Salman_Khan_photo.jpg"
+      },
+      "message": "Make sure to save me a seat near the window.",
+      "created_at": "2025-07-20T15:15:00Z"
+    },
+    {
+      "message_id": 13,
+      "sender": {
+        "id": 11,
+        "full_name": "Alia Bhatt",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/3/32/Alia_Bhatt_at_Berlinale_2022_Ausschnitt.jpg"
+      },
+      "message": "I’ll join a bit late, hope that’s fine.",
+      "created_at": "2025-07-20T15:20:00Z"
+    },
+    {
+      "message_id": 14,
+      "sender": {
+        "id": 12,
+        "full_name": "Akshay Kumar",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Akshay_Kumar_in_2019.jpg"
+      },
+      "message": "No worries Alia, we’ll wait for you.",
+      "created_at": "2025-07-20T15:25:00Z"
+    },
+    {
+      "message_id": 15,
+      "sender": {
+        "id": 13,
+        "full_name": "Anushka Sharma",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Anushka_Sharma_in_2018.jpg"
+      },
+      "message": "Don’t forget to click some pictures!",
+      "created_at": "2025-07-20T15:30:00Z"
+    },
+    {
+      "message_id": 16,
+      "sender": {
+        "id": 14,
+        "full_name": "Varun Dhawan",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Varun_Dhawan_promoting_Badrinath_Ki_Dulhania.jpg"
+      },
+      "message": "Haha, I’ll bring my camera!",
+      "created_at": "2025-07-20T15:35:00Z"
+    },
+    {
+      "message_id": 17,
+      "sender": {
+        "id": 15,
+        "full_name": "Sonam Kapoor",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/3/37/Sonam_Kapoor_in_2017.jpg"
+      },
+      "message": "Should we also plan some games?",
+      "created_at": "2025-07-20T15:40:00Z"
+    },
+    {
+      "message_id": 18,
+      "sender": {
+        "id": 16,
+        "full_name": "Ranveer Singh",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Ranveer_Singh_in_2019.jpg"
+      },
+      "message": "Yes! I’ll bring cards for sure.",
+      "created_at": "2025-07-20T15:45:00Z"
+    },
+    {
+      "message_id": 19,
+      "sender": {
+        "id": 17,
+        "full_name": "Madhuri Dixit",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Madhuri_Dixit_in_2018.jpg"
+      },
+      "message": "Looking forward to catching up with everyone.",
+      "created_at": "2025-07-20T15:50:00Z"
+    },
+    {
+      "message_id": 20,
+      "sender": {
+        "id": 18,
+        "full_name": "Ayushmann Khurrana",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/7/70/Ayushmann_Khurrana_in_2019.jpg"
+      },
+      "message": "I’ll bring my guitar, maybe we can jam!",
+      "created_at": "2025-07-20T15:55:00Z"
+    },
+    {
+      "message_id": 21,
+      "sender": {
+        "id": 19,
+        "full_name": "Vidya Balan",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Vidya_Balan_promoting_Tumhari_Sulu.jpg"
+      },
+      "message": "Oh wow, that would be amazing.",
+      "created_at": "2025-07-20T16:00:00Z"
+    },
+    {
+      "message_id": 22,
+      "sender": {
+        "id": 20,
+        "full_name": "Rajkummar Rao",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/2/23/Rajkummar_Rao_in_2018.jpg"
+      },
+      "message": "Don’t forget to invite others from the group too.",
+      "created_at": "2025-07-20T16:05:00Z"
+    },
+    {
+      "message_id": 23,
+      "sender": {
+        "id": 21,
+        "full_name": "Katrina Kaif",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Katrina_Kaif_in_2019.jpg"
+      },
+      "message": "I’ll share the event in the community channel.",
+      "created_at": "2025-07-20T16:10:00Z"
+    },
+    {
+      "message_id": 24,
+      "sender": {
+        "id": 22,
+        "full_name": "Shahid Kapoor",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Shahid_Kapoor_in_2019.jpg"
+      },
+      "message": "Thanks Katrina! That’ll help a lot.",
+      "created_at": "2025-07-20T16:15:00Z"
+    },
+    {
+      "message_id": 25,
+      "sender": {
+        "id": 23,
+        "full_name": "Disha Patani",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Disha_Patani_in_2020.jpg"
+      },
+      "message": "Can we also order some snacks beforehand?",
+      "created_at": "2025-07-20T16:20:00Z"
+    },
+    {
+      "message_id": 26,
+      "sender": {
+        "id": 24,
+        "full_name": "Tiger Shroff",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/2/26/Tiger_Shroff_promoting_War.jpg"
+      },
+      "message": "I’ll take care of snacks.",
+      "created_at": "2025-07-20T16:25:00Z"
+    },
+    {
+      "message_id": 27,
+      "sender": {
+        "id": 25,
+        "full_name": "Parineeti Chopra",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Parineeti_Chopra_promoting_Meri_Pyaari_Bindu.jpg"
+      },
+      "message": "Thanks Tiger, that’s thoughtful.",
+      "created_at": "2025-07-20T16:30:00Z"
+    },
+    {
+      "message_id": 28,
+      "sender": {
+        "id": 26,
+        "full_name": "John Abraham",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/1/19/John_Abraham_in_2019.jpg"
+      },
+      "message": "I can bring drinks if needed.",
+      "created_at": "2025-07-20T16:35:00Z"
+    },
+    {
+      "message_id": 29,
+      "sender": {
+        "id": 27,
+        "full_name": "Jacqueline Fernandez",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Jacqueline_Fernandez_in_2018.jpg"
+      },
+      "message": "Yay! This will be so much fun.",
+      "created_at": "2025-07-20T16:40:00Z"
+    },
+    {
+      "message_id": 30,
+      "sender": {
+        "id": 28,
+        "full_name": "Saif Ali Khan",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Saif_Ali_Khan_in_2019.jpg"
+      },
+      "message": "Can someone arrange a speaker?",
+      "created_at": "2025-07-20T16:45:00Z"
+    },
+    {
+      "message_id": 31,
+      "sender": {
+        "id": 29,
+        "full_name": "Kriti Sanon",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Kriti_Sanon_in_2019.jpg"
+      },
+      "message": "I have a portable speaker, I’ll bring it.",
+      "created_at": "2025-07-20T16:50:00Z"
+    },
+    {
+      "message_id": 32,
+      "sender": {
+        "id": 30,
+        "full_name": "Arjun Kapoor",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Arjun_Kapoor_in_2019.jpg"
+      },
+      "message": "Perfect! Music will set the mood.",
+      "created_at": "2025-07-20T16:55:00Z"
+    },
+    {
+      "message_id": 33,
+      "sender": {
+        "id": 31,
+        "full_name": "Shraddha Kapoor",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Shraddha_Kapoor_in_2019.jpg"
+      },
+      "message": "Can’t wait to see you all tomorrow ❤️",
+      "created_at": "2025-07-20T17:00:00Z"
+    },
+    {
+      "message_id": 34,
+      "sender": {
+        "id": 32,
+        "full_name": "Sidharth Malhotra",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Sidharth_Malhotra_in_2019.jpg"
+      },
+      "message": "Same here, it’s been too long since our last get-together.",
+      "created_at": "2025-07-20T17:05:00Z"
+    },
+    {
+      "message_id": 35,
+      "sender": {
+        "id": 33,
+        "full_name": "Kangana Ranaut",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Kangana_Ranaut_in_2019.jpg"
+      },
+      "message": "Let’s also decide who’s paying the bill 😂",
+      "created_at": "2025-07-20T17:10:00Z"
+    },
+    {
+      "message_id": 36,
+      "sender": {
+        "id": 34,
+        "full_name": "Vicky Kaushal",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Vicky_Kaushal_in_2019.jpg"
+      },
+      "message": "Haha, let’s split equally!",
+      "created_at": "2025-07-20T17:15:00Z"
+    },
+    {
+      "message_id": 37,
+      "sender": {
+        "id": 35,
+        "full_name": "Rani Mukerji",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Rani_Mukerji_in_2019.jpg"
+      },
+      "message": "Deal! No arguments tomorrow.",
+      "created_at": "2025-07-20T17:20:00Z"
+    },
+    {
+      "message_id": 38,
+      "sender": {
+        "id": 36,
+        "full_name": "Abhishek Bachchan",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/8/86/Abhishek_Bachchan_in_2019.jpg"
+      },
+      "message": "This is going to be legendary!",
+      "created_at": "2025-07-20T17:25:00Z"
+    },
+    {
+      "message_id": 39,
+      "sender": {
+        "id": 37,
+        "full_name": "Juhi Chawla",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Juhi_Chawla_in_2019.jpg"
+      },
+      "message": "Can we make this a monthly tradition?",
+      "created_at": "2025-07-20T17:30:00Z"
+    },
+    {
+      "message_id": 40,
+      "sender": {
+        "id": 38,
+        "full_name": "Farhan Akhtar",
+        "profile": "https://upload.wikimedia.org/wikipedia/commons/1/18/Farhan_Akhtar_in_2019.jpg"
+      },
+      "message": "Yes! A regular meetup will be awesome.",
+      "created_at": "2025-07-20T17:35:00Z"
+    }
+
+  ]
+}

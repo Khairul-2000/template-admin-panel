@@ -6,6 +6,7 @@ import { EditOutlined } from "@ant-design/icons";
 import { useAllMockFoodOrders } from "../../api/api";
 import { useLocation, useNavigate } from "react-router-dom";
 import OrderDetails from "./OrderDetails";
+import logo from "../../assets/logo.png"
 
 function ProductOrders() {
   const location = useLocation();
@@ -338,26 +339,6 @@ function ProductOrders() {
         loading={isLoading}
       />
 
-      {/* Paid status change */}
-      <Modal
-        title="Paid Change Status"
-        open={isPaidStatusModalOpen}
-        onOk={handlePaidStatusChange}
-        onCancel={() => setIsPaidStatusModalOpen(false)}
-        okText="Update"
-        confirmLoading={isPaidStatusChangeLoading}
-      >
-        <p>Select new paid status for this order:</p>
-        <Select
-          value={newPaidStatus}
-          onChange={(value) => setNewPaidStatus(value)}
-          style={{ width: "100%" }}
-        >
-          <Select.Option value="Paid">Paid</Select.Option>
-          <Select.Option value="Online Pay">Online Pay</Select.Option>
-        </Select>
-      </Modal>
-
       {/* status change */}
       <Modal
         title="Change Status"
@@ -381,7 +362,7 @@ function ProductOrders() {
 
       {/* Edit order modal */}
       <Modal
-        title="Edit Order"
+       
         open={isEditModalOpen}
         onOk={handleEditSubmit}
         onCancel={() => setIsEditModalOpen(false)}
@@ -391,9 +372,14 @@ function ProductOrders() {
         width={800}
       >
         <div className="space-y-4">
+
+          <div className="flex flex-col justify-center items-center  gap-4  p-4">
+            <img src={logo} alt="logo" className="h-[30px] object-contain" />
+            <h1 className="font-bold text-4xl">Order Details</h1>
+          </div>
           {/* Contact Information */}
           <div>
-            <label className="block mb-1 font-medium">Contact Number</label>
+            <label className="block mb-1 font-medium">Name</label>
             <Input
               value={editContactNumber}
               onChange={(e) => setEditContactNumber(e.target.value)}

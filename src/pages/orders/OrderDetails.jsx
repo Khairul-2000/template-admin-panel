@@ -19,6 +19,8 @@ import {
   Col,
 } from "antd";
 
+import logo from "../../assets/logo.png"
+
 const OrderDetails = ({ record, refetch }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -84,20 +86,9 @@ const OrderDetails = ({ record, refetch }) => {
       />
 
       <Modal
-        title={
-          <div className="flex items-center justify-between">
-            <span className="text-xl font-semibold text-gray-800">
-              Order Details
-            </span>
-            <Tag
-              color={getStatusColor(record?.status)}
-              className="text-sm font-medium mr-6 px-3 py-1"
-            >
-              {record?.status}
-            </Tag>
-          </div>
-        }
-        width={1000}
+        
+        
+        width={500}
         closable={true}
         open={isModalOpen}
         onOk={handleOk}
@@ -114,31 +105,11 @@ const OrderDetails = ({ record, refetch }) => {
       >
         {record && (
           <div className="space-y-6">
-            {/* Customer Information */}
-            <Card
-              title="Customer Information"
-              size="small"
-              className="shadow-sm"
-            >
-              
-              <Divider className="my-4" />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-medium text-gray-700 mb-2">
-                    Delivery Address
-                  </h4>
-                  <p className="text-gray-600 bg-gray-50 p-2 rounded">
-                    {record.delivery_address}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-700 mb-2">Order Date</h4>
-                  <p className="text-gray-600">{formatDate(record.date)}</p>
-                </div>
-              </div>
-            </Card>
-
+            {/* Logo */}
+            <div className="w-full h-32 flex items-center justify-center ">
+              <img src={logo} alt="Logo" className="h-1/2 object-contain" />
+            </div>
+     
             {/* Order Items */}
             <Card title="Order Items" size="small" className="shadow-sm">
               <div className="space-y-4">
@@ -149,7 +120,7 @@ const OrderDetails = ({ record, refetch }) => {
                   >
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-800">
-                        {item.name} ({item.quantity})
+                        {item.name} ({item.quantity} x)
                       </h4>
                     </div>
                     <div className="text-right">

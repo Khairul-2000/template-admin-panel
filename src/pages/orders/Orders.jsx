@@ -453,7 +453,7 @@ function ProductOrders() {
                     <div className="flex-1">
                       <p className="font-medium">{item.name}</p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center  gap-2">
                       <div>
                         <label className="block text-xs text-gray-600 mb-1">Qty</label>
                         <InputNumber
@@ -463,17 +463,18 @@ function ProductOrders() {
                           style={{ width: "70px" }}
                         />
                       </div>
-                      {/* <div>
+                      <div className="">
                         <label className="block text-xs text-gray-600 mb-1">Price</label>
-                        <InputNumber
+                        <p>${item.price}</p>
+                        {/* <InputNumber
                           min={0}
                           step={0.01}
                           value={item.price}
                           onChange={(value) => handleItemPriceChange(item.id, value)}
                           prefix="$"
                           style={{ width: "100px" }}
-                        />
-                      </div> */}
+                        /> */}
+                      </div>
                       <div className="pt-5">
                         <Button
                           danger

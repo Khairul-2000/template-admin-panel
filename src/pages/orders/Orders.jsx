@@ -40,7 +40,9 @@ function ProductOrders() {
   // Edit order modal states
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedForEdit, setSelectedForEdit] = useState(null);
-  const [editContactNumber, setEditContactNumber] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [editDeliveryAddress, setEditDeliveryAddress] = useState("");
   const [editDeliveryFee, setEditDeliveryFee] = useState(0);
   const [editItems, setEditItems] = useState([]);
@@ -113,7 +115,9 @@ function ProductOrders() {
   // edit modal
   const openEditModal = (record) => {
     setSelectedForEdit(record);
-    setEditContactNumber(record?.contact_number || "");
+    setName(record?.user?.name || "");
+    setEmail(record?.user?.email || "");
+    setPhone(record?.user?.phone || "");
     setEditDeliveryAddress(record?.delivery_address || "");
     setEditDeliveryFee(record?.delivery_fee || 0);
     setEditItems(record?.items ? [...record.items] : []);
@@ -136,9 +140,9 @@ function ProductOrders() {
         total_quantity: editItems.reduce((sum, item) => sum + item.quantity, 0),
         total_price: editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + editDeliveryFee,
       };
-      
+
       console.log("Updated order data:", updatedOrder);
-      
+
       message.success("Order updated successfully!");
       setIsEditModalOpen(false);
       setSelectedForEdit(null);
@@ -269,8 +273,8 @@ function ProductOrders() {
               status === "Delivered"
                 ? "green"
                 : status === "On Going"
-                ? "blue"
-                : "orange"
+                  ? "blue"
+                  : "orange"
             }
           >
             {status}
@@ -362,14 +366,14 @@ function ProductOrders() {
 
       {/* Edit order modal */}
       <Modal
-       
+
         open={isEditModalOpen}
         onOk={handleEditSubmit}
         onCancel={() => setIsEditModalOpen(false)}
         okText="Save Changes"
         cancelText="Cancel"
         confirmLoading={isEditLoading}
-        width={800}
+        width={600}
       >
         <div className="space-y-4">
 
@@ -377,112 +381,152 @@ function ProductOrders() {
             <img src={logo} alt="logo" className="h-[30px] object-contain" />
             <h1 className="font-bold text-4xl">Order Details</h1>
           </div>
-          {/* Contact Information */}
-          <div>
-            <label className="block mb-1 font-medium">Name</label>
-            <Input
-              value={editContactNumber}
-              onChange={(e) => setEditContactNumber(e.target.value)}
-              placeholder="Enter contact number"
-            />
+
+
+          <div className=" p-4">
+            {/* Contact Information */}
+            <div>
+              <h1 className="text-2xl font-bold">Customer Information</h1>
+            </div>
+            <div className="flex flex-row items-center justify-center gap-3 mb-3">
+              <label className="block mb-1 font-medium w-1/2">Name</label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter name"
+                className="w-1/2 border-none"
+              />
+            </div>
+
+
+            {/* Email */}
+            <div className="flex flex-row items-center justify-center gap-3 mb-3">
+              <label className="block mb-1 font-medium w-1/2">Email</label>
+              <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter email"
+                className="w-1/2 border-none"
+              />
+            </div>
+
+            {/* Phone */}
+            <div className="flex flex-row items-center justify-center gap-3 mb-3">
+              <label className="block mb-1 font-medium w-1/2">Phone</label>
+              <Input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter phone number"
+                className="w-1/2 border-none"
+              />
+            </div>
+
+            {/* Order Address */}
+            <div className="flex flex-row items-center justify-center gap-3 mb-3">
+              <label className="block mb-1 font-medium w-1/2">Order Address</label>
+              <Input
+                value={editDeliveryAddress}
+                onChange={(e) => setEditDeliveryAddress(e.target.value)}
+                placeholder="Enter order address"
+
+                className="w-1/2 border-none"
+              />
+            </div>
           </div>
 
-          {/* Delivery Address */}
-          <div>
-            <label className="block mb-1 font-medium">Delivery Address</label>
-            <Input.TextArea
-              value={editDeliveryAddress}
-              onChange={(e) => setEditDeliveryAddress(e.target.value)}
-              placeholder="Enter delivery address"
-              rows={3}
-            />
-          </div>
+          {/* Order Details */}
+          <div className="">
 
-          {/* Order Items */}
-          <div>
-            <label className="block mb-2 font-medium">Order Items</label>
-            <div className="space-y-3 max-h-60 overflow-y-auto">
-              {editItems.map((item, index) => (
-                <div
-                  key={item.id}
-                  className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
-                >
-                  <div className="flex-1">
-                    <p className="font-medium">{item.name}</p>
+            <div>
+              <h1 className="text-2xl font-bold">Order Details</h1>
+            </div>
+
+            {/* Order Items */}
+            <div>
+              
+              <div className="space-y-3 max-h-60 overflow-y-auto">
+                {editItems.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                  >
+                    <div className="flex-1">
+                      <p className="font-medium">{item.name}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">Qty</label>
+                        <InputNumber
+                          min={1}
+                          value={item.quantity}
+                          onChange={(value) => handleItemQuantityChange(item.id, value)}
+                          style={{ width: "70px" }}
+                        />
+                      </div>
+                      {/* <div>
+                        <label className="block text-xs text-gray-600 mb-1">Price</label>
+                        <InputNumber
+                          min={0}
+                          step={0.01}
+                          value={item.price}
+                          onChange={(value) => handleItemPriceChange(item.id, value)}
+                          prefix="$"
+                          style={{ width: "100px" }}
+                        />
+                      </div> */}
+                      <div className="pt-5">
+                        <Button
+                          danger
+                          size="small"
+                          onClick={() => handleRemoveItem(item.id)}
+                          disabled={editItems.length <= 1}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div>
-                      <label className="block text-xs text-gray-600 mb-1">Qty</label>
-                      <InputNumber
-                        min={1}
-                        value={item.quantity}
-                        onChange={(value) => handleItemQuantityChange(item.id, value)}
-                        style={{ width: "70px" }}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-gray-600 mb-1">Price</label>
-                      <InputNumber
-                        min={0}
-                        step={0.01}
-                        value={item.price}
-                        onChange={(value) => handleItemPriceChange(item.id, value)}
-                        prefix="$"
-                        style={{ width: "100px" }}
-                      />
-                    </div>
-                    <div className="pt-5">
-                      <Button
-                        danger
-                        size="small"
-                        onClick={() => handleRemoveItem(item.id)}
-                        disabled={editItems.length <= 1}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Delivery Fee */}
-          <div>
-            <label className="block mb-1 font-medium">Delivery Fee</label>
-            <InputNumber
-              min={0}
-              step={0.01}
-              value={editDeliveryFee}
-              onChange={(value) => setEditDeliveryFee(value)}
-              prefix="$"
-              style={{ width: "100%" }}
-            />
-          </div>
+            {/* Delivery Fee */}
+            <div>
+              <label className="block mb-1 font-medium">Delivery Fee</label>
+              <InputNumber
+                min={0}
+                step={0.01}
+                value={editDeliveryFee}
+                onChange={(value) => setEditDeliveryFee(value)}
+                prefix="$"
+                style={{ width: "100%" }}
+              />
+            </div>
 
-          {/* Order Summary */}
-          <div className="border-t pt-3 mt-3">
-            <div className="flex justify-between text-sm mb-1">
-              <span>Total Items:</span>
-              <span className="font-medium">
-                {editItems.reduce((sum, item) => sum + item.quantity, 0)}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm mb-1">
-              <span>Subtotal:</span>
-              <span className="font-medium">
-                ${editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm mb-1">
-              <span>Delivery Fee:</span>
-              <span className="font-medium">${editDeliveryFee.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
-              <span>Total:</span>
-              <span className="text-blue-600">
-                ${(editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + editDeliveryFee).toFixed(2)}
-              </span>
+            {/* Order Summary */}
+            <div className="border-t pt-3 mt-3">
+              <div className="flex justify-between text-sm mb-1">
+                <span>Total Items:</span>
+                <span className="font-medium">
+                  {editItems.reduce((sum, item) => sum + item.quantity, 0)}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm mb-1">
+                <span>Subtotal:</span>
+                <span className="font-medium">
+                  ${editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm mb-1">
+                <span>Delivery Fee:</span>
+                <span className="font-medium">${editDeliveryFee.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
+                <span>Total:</span>
+                <span className="text-blue-600">
+                  ${(editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + editDeliveryFee).toFixed(2)}
+                </span>
+              </div>
             </div>
           </div>
         </div>

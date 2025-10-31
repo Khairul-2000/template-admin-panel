@@ -5,12 +5,17 @@ import {
   FaShoppingCart,
   FaCheckCircle,
   FaArrowUp,
-  FaArrowDown
+  FaArrowDown,
+  FaChevronDown,
+  FaExclamationTriangle
 } from 'react-icons/fa';
+import { ImCancelCircle } from "react-icons/im";
+
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Dashboard = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState('current');
 
   // Mock data for the dashboard
   const userData = {
@@ -18,11 +23,49 @@ const Dashboard = () => {
     greeting: "Hi, Good Morning"
   };
 
+  // Month options for dropdown
+  const monthOptions = [
+    { value: 'current', label: 'Current Month' },
+    { value: 'january', label: 'January' },
+    { value: 'february', label: 'February' },
+    { value: 'march', label: 'March' },
+    { value: 'april', label: 'April' },
+    { value: 'may', label: 'May' },
+    { value: 'june', label: 'June' },
+    { value: 'july', label: 'July' },
+    { value: 'august', label: 'August' },
+    { value: 'september', label: 'September' },
+    { value: 'october', label: 'October' },
+    { value: 'november', label: 'November' },
+    { value: 'december', label: 'December' }
+  ];
+
+  // Function to get active orders based on selected month
+  const getActiveOrdersForMonth = (month) => {
+    const monthData = {
+      current: 4,
+      january: 3,
+      february: 5,
+      march: 2,
+      april: 7,
+      may: 6,
+      june: 4,
+      july: 8,
+      august: 5,
+      september: 3,
+      october: 4,
+      november: 6,
+      december: 9
+    };
+    return monthData[month] || 0;
+  };
+
   const overviewData = {
     totalProduct: 15,
     totalUsers: 20,
-    activeOrders: 4,
-    successfulOrder: 5
+    activeOrders: getActiveOrdersForMonth(selectedMonth),
+    successfulOrder: 5,
+    cancelledOrders: 2
   };
 
   // Mock data for orders chart
@@ -42,6 +85,15 @@ const Dashboard = () => {
     timeframe: "Last Month",
     comparisonText: "vs Last month"
   };
+
+  // Mock data for not available items
+  const notAvailableItems = [
+    { id: 1, productName: "iPhone 15 Pro Max", quantity: 3 },
+    { id: 2, productName: "Samsung Galaxy S24 Ultra", quantity: 2 },
+    { id: 3, productName: "MacBook Pro M3", quantity: 1 },
+    { id: 4, productName: "Sony WH-1000XM5", quantity: 5 },
+    { id: 5, productName: "iPad Pro 12.9", quantity: 2 }
+  ];
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -69,7 +121,7 @@ const Dashboard = () => {
                 <FaBox className="text-blue-600 text-xl" />
               </div>
               <h3 className="text-2xl font-bold text-gray-800">{overviewData.totalProduct}</h3>
-              <p className="text-gray-500 text-sm mt-1">Total Product</p>
+              <p className="text-gray-500 text-sm mt-1">Total Items</p>
             </div>
           </div>
 
@@ -92,6 +144,22 @@ const Dashboard = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-800">{overviewData.activeOrders}</h3>
               <p className="text-gray-500 text-sm mt-1">Active Orders</p>
+              
+              {/* Month Dropdown */}
+              <div className="relative mt-3 w-full">
+                <select 
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className="w-full px-3 py-2 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+                >
+                  {monthOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs pointer-events-none" />
+              </div>
             </div>
           </div>
 
@@ -101,10 +169,71 @@ const Dashboard = () => {
               <div className="bg-blue-100 p-3 rounded-full mb-3">
                 <FaCheckCircle className="text-blue-600 text-xl" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800">{overviewData.successfulOrder}</h3>
+                <h3 className="text-2xl font-bold text-gray-800">{overviewData.successfulOrder}</h3>
               <p className="text-gray-500 text-sm mt-1">Successful Order</p>
             </div>
           </div>
+
+          {/* order cancelled card */}
+           <div className="bg-white rounded-lg p-5 shadow-sm">
+            <div className="flex flex-col items-center">
+              <div className="bg-blue-100 p-3 rounded-full mb-3">
+                {/* <FaCheckCircle className="text-blue-600 text-xl" /> */}
+                <ImCancelCircle className="text-blue-600 text-xl" />
+
+              </div>
+              <h3 className="text-2xl font-bold text-gray-800">{overviewData.cancelledOrders}</h3>
+              <p className="text-gray-500 text-sm mt-1">Orders Cancelled</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Not Available Section */}
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Not Available</h2>
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="px-6 py-4 bg-red-50 border-b border-red-100">
+            <div className="flex items-center">
+              <FaExclamationTriangle className="text-red-500 text-lg mr-3" />
+              <h3 className="text-lg font-semibold text-red-700">Items Requested by Customers</h3>
+            </div>
+            <p className="text-red-600 text-sm mt-1">Products that customers requested but were not available in inventory</p>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Product Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Quantity
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {notAvailableItems.map((item) => (
+                  <tr key={item.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{item.productName}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{item.quantity}</div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          {notAvailableItems.length === 0 && (
+            <div className="px-6 py-8 text-center">
+              <FaCheckCircle className="mx-auto h-12 w-12 text-green-400 mb-4" />
+              <p className="text-gray-500">No unavailable items requested by customers</p>
+            </div>
+          )}
         </div>
       </div>
 

@@ -78,9 +78,27 @@ const Dashboard = () => {
     { month: 'Jun', orders: 145 }
   ];
 
+  // Mock data for earnings chart
+  const earningsChartData = [
+    { month: 'Jan', earnings: 12500 },
+    { month: 'Feb', earnings: 15800 },
+    { month: 'Mar', earnings: 11200 },
+    { month: 'Apr', earnings: 18900 },
+    { month: 'May', earnings: 22100 },
+    { month: 'Jun', earnings: 25400 }
+  ];
+
   const ordersStats = {
     totalOrders: 145,
     percentageChange: 8.2,
+    isIncrease: true,
+    timeframe: "Last Month",
+    comparisonText: "vs Last month"
+  };
+
+  const earningsStats = {
+    totalEarnings: 25400,
+    percentageChange: 14.9,
     isIncrease: true,
     timeframe: "Last Month",
     comparisonText: "vs Last month"
@@ -237,8 +255,8 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Bottom Section - Orders Chart and Upload Product */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Bottom Section - Orders Chart, Earnings Chart and Upload Product */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Orders Chart */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <div className="mb-4">
@@ -274,6 +292,52 @@ const Dashboard = () => {
                   stroke="#FF6B6B" 
                   strokeWidth={2}
                   dot={{ fill: '#FF6B6B', strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Earnings Chart */}
+        <div className="bg-white rounded-lg p-6 shadow-sm">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Earnings</h3>
+            <div className="flex items-center mt-2">
+              <span className="text-2xl font-bold text-gray-800 mr-3">${earningsStats.totalEarnings.toLocaleString()}</span>
+              <div className={`flex items-center ${earningsStats.isIncrease ? 'text-green-500' : 'text-red-500'}`}>
+                {earningsStats.isIncrease ? <FaArrowUp className="text-xs mr-1" /> : <FaArrowDown className="text-xs mr-1" />}
+                <span className="text-sm font-medium">{earningsStats.percentageChange}%</span>
+              </div>
+              <span className="text-gray-500 text-sm ml-2">{earningsStats.comparisonText}</span>
+            </div>
+            <p className="text-gray-500 text-sm mt-1">💰 {earningsStats.timeframe}</p>
+          </div>
+          
+          <div className="h-48">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={earningsChartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis 
+                  dataKey="month" 
+                  tick={{ fontSize: 12 }}
+                  stroke="#9CA3AF"
+                />
+                <YAxis 
+                  tick={{ fontSize: 12 }}
+                  stroke="#9CA3AF"
+                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                />
+                <Tooltip 
+                  formatter={(value) => [`$${value.toLocaleString()}`, 'Earnings']}
+                  labelStyle={{ color: '#374151' }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="earnings" 
+                  stroke="#10B981" 
+                  strokeWidth={2}
+                  dot={{ fill: '#10B981', strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6 }}
                 />
               </LineChart>

@@ -227,11 +227,7 @@ function ProductOrders() {
       key: "user",
       render: (_, record) => (
         <div className="flex flex-items-center gap-2">
-          <img
-            className="w-[40px] h-[40px] rounded-full mt-1"
-            src={record.user.profile}
-            alt={record.user.name}
-          />
+         
           <div className="">
             <h1 className="">{record.user.name}</h1>
             <p className="text-sm text-gray-600 mt-[-5px]">

@@ -48,10 +48,7 @@ function Administrators() {
       key: "full_name",
       render: (_, record) => (
         <div className="flex gap-2 items-center">
-          <Image
-            src={record?.profile}
-            className="!w-[50px] !h-[50px] rounded-full"
-          />
+        
           <h2>{record?.full_name}</h2>
         </div>
       ),

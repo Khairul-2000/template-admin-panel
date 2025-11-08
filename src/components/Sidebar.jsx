@@ -3,6 +3,8 @@ import { AppstoreOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import { MdOutlineAdminPanelSettings, MdOutlinePostAdd } from "react-icons/md";
+import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+
 import orderIcon from "../assets/order.png";
 
 import { RiUserCommunityFill } from "react-icons/ri";
@@ -30,9 +32,9 @@ const Sidebar = ({ onClick }) => {
     // if (path === "/user-management") return ["user-management"];
     if (path === "/administrators") return ["3"];
     if (path === "/orders") return ["orders"];
+    if (path === "/products") return ["products"];
     if(path === "/settings") return ["settings"];
-    // if (path === "/community") return ["community"];
-    // if (path === "/orbit-post") return ["orbit-post"];
+ 
     return ["1"];
   };
 
@@ -66,12 +68,19 @@ const Sidebar = ({ onClick }) => {
       icon: <img src={orderIcon} alt="Orders" className="w-6" />,
       label: <Link to="/orders">Orders</Link>,
     },
+    {
+      key: "products",
+      icon: <MdOutlineProductionQuantityLimits className="!text-xl" />,
+      label: <Link to="/products">Products</Link>,
+
+    },  
  
     {
       key: "settings",
       icon: <MdOutlinePostAdd className="!text-xl" />,
       label: <Link to="/settings">Settings</Link>,
     },
+    
 
     // Add logout as a menu item at the bottom
     {

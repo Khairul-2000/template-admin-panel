@@ -13,6 +13,7 @@ import Administrators from "../pages/administrators/Administrators";
 import PrivateRoute from "./PrivateRoute";
 import Orders from "../pages/orders/Orders";
 import Setting from "../pages/settings/setting";
+import Products from "../pages/products/Products";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
       {
         path: "/orders",
         element: <Orders />,
+      },
+      {
+        path: "/products",
+        element: <Products />,
       },
       {
         path: "/settings",

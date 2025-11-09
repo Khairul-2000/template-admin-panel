@@ -225,21 +225,20 @@ function ProductOrders() {
       title: <span>Sl no.</span>,
       dataIndex: "serial_number",
       key: "serial_number",
+      align: "center",
       render: (_, record, index) => <span>#{index + 1}</span>,
     },
     {
       title: <span>User</span>,
       dataIndex: "user",
       key: "user",
+      align: "center",
       render: (_, record) => (
-        <div className="flex flex-items-center gap-2">
-         
-          <div className="">
-            <h1 className="">{record.user.name}</h1>
-            <p className="text-sm text-gray-600 mt-[-5px]">
-              {record.user.email}
-            </p>
-          </div>
+        <div className="flex flex-col items-center justify-center gap-1">
+          <h1 className="font-medium">{record.user.name}</h1>
+          <p className="text-sm text-gray-600">
+            {record.user.email}
+          </p>
         </div>
       ),
     },
@@ -248,24 +247,28 @@ function ProductOrders() {
       title: <span>Phone</span>,
       dataIndex: "contact_number",
       key: "contact_number",
+      align: "center",
       render: (contact_number) => <span>{contact_number}</span>,
     },
     {
       title: <span>Delivery Address</span>,
       dataIndex: "delivery_address",
       key: "delivery_address",
+      align: "center",
       render: (delivery_address) => <span>{delivery_address}</span>,
     },
      {
       title: <span>Estimated Delivery Date</span>,
       dataIndex: "estimated_delivery_date",
       key: "estimated_delivery_date",
+      align: "center",
       render: (estimated_delivery_date) => <span>{estimated_delivery_date}</span>,
     },
     {
       title: <span>Amount</span>,
       dataIndex: "total_price",
       key: "total_price",
+      align: "center",
       render: (total_price) => <span>£{total_price.toFixed(2)}</span>,
     },
 
@@ -273,8 +276,9 @@ function ProductOrders() {
       title: <span>Status</span>,
       dataIndex: "status",
       key: "status",
+      align: "center",
       render: (status, record) => (
-        <div className="flex items-center">
+        <div className="flex items-center justify-center">
           <Tag
             className="p-0.5 px-3"
             color={
@@ -306,6 +310,7 @@ function ProductOrders() {
     {
       title: <span>Details</span>,
       key: "Details",
+      align: "center",
       render: (_, record) => <OrderDetails record={record} refetch={refetch} />,
     },
 
@@ -313,8 +318,9 @@ function ProductOrders() {
     {
       title: <span>Action</span>,
       key: "action",
+      align: "center",
       render: (_, record) => (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Button
             size="small"
             icon={<EditOutlined />}
@@ -337,6 +343,7 @@ function ProductOrders() {
   return (
     <div className="p-4">
       <Table
+      
         columns={columns}
         dataSource={allMockFoodOrders}
         rowKey="_id"

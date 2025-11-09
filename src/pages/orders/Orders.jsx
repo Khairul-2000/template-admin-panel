@@ -44,6 +44,7 @@ function ProductOrders() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [editDeliveryAddress, setEditDeliveryAddress] = useState("");
+  const [editEstimatedDeliveryDate, setEditEstimatedDeliveryDate] = useState("");
   const [editDeliveryFee, setEditDeliveryFee] = useState(0);
   const [editItems, setEditItems] = useState([]);
   const [isEditLoading, setIsEditLoading] = useState(false);
@@ -56,6 +57,9 @@ function ProductOrders() {
     error,
     refetch,
   } = useAllMockFoodOrders(filter);
+
+
+  console.log("allMockFoodOrdersallMockFoodOrders", allMockFoodOrders);
 
   // Driver assignment modal
   const openDriverAssignModal = (record) => {
@@ -119,6 +123,7 @@ function ProductOrders() {
     setEmail(record?.user?.email || "");
     setPhone(record?.user?.phone || "");
     setEditDeliveryAddress(record?.delivery_address || "");
+    setEditEstimatedDeliveryDate(record?.estimated_delivery_date || "");
     setEditDeliveryFee(record?.delivery_fee || 0);
     setEditItems(record?.items ? [...record.items] : []);
     setIsEditModalOpen(true);
@@ -134,6 +139,7 @@ function ProductOrders() {
         ...selectedForEdit,
         contact_number: editContactNumber,
         delivery_address: editDeliveryAddress,
+        estimated_delivery_date: editEstimatedDeliveryDate,
         delivery_fee: editDeliveryFee,
         items: editItems,
         // Recalculate totals
@@ -250,11 +256,17 @@ function ProductOrders() {
       key: "delivery_address",
       render: (delivery_address) => <span>{delivery_address}</span>,
     },
+     {
+      title: <span>Estimated Delivery Date</span>,
+      dataIndex: "estimated_delivery_date",
+      key: "estimated_delivery_date",
+      render: (estimated_delivery_date) => <span>{estimated_delivery_date}</span>,
+    },
     {
       title: <span>Amount</span>,
       dataIndex: "total_price",
       key: "total_price",
-      render: (total_price) => <span>${total_price.toFixed(2)}</span>,
+      render: (total_price) => <span>£{total_price.toFixed(2)}</span>,
     },
 
     {
@@ -461,13 +473,13 @@ function ProductOrders() {
                       </div>
                       <div className="">
                         <label className="block text-xs text-gray-600 mb-1">Price</label>
-                        <p>${item.price}</p>
+                        <p>£{item.price.toFixed(2)}</p>
                         {/* <InputNumber
                           min={0}
                           step={0.01}
                           value={item.price}
                           onChange={(value) => handleItemPriceChange(item.id, value)}
-                          prefix="$"
+                          prefix="£"
                           style={{ width: "100px" }}
                         /> */}
                       </div>
@@ -495,7 +507,7 @@ function ProductOrders() {
                 step={0.01}
                 value={editDeliveryFee}
                 onChange={(value) => setEditDeliveryFee(value)}
-                prefix="$"
+                prefix="£"
                 style={{ width: "100%" }}
               />
             </div>
@@ -511,17 +523,17 @@ function ProductOrders() {
               <div className="flex justify-between text-sm mb-1">
                 <span>Subtotal:</span>
                 <span className="font-medium">
-                  ${editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+                  £{editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-sm mb-1">
                 <span>Delivery Fee:</span>
-                <span className="font-medium">${editDeliveryFee.toFixed(2)}</span>
+                <span className="font-medium">£{editDeliveryFee.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
                 <span>Total:</span>
                 <span className="text-blue-600">
-                  ${(editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + editDeliveryFee).toFixed(2)}
+                  £{(editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + editDeliveryFee).toFixed(2)}
                 </span>
               </div>
             </div>

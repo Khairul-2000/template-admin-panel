@@ -41,8 +41,8 @@ const Products = () => {
                 <h1 className="text-2xl font-bold mb-4">Products Page</h1>
                 <p>Welcome to the Products page. Here you can manage your products.</p>
             </div>
-           <div>
-               <button className="bg-green-300 text-black font-semibold p-4 rounded-md cursor-pointer" onClick={handleAddProduct}>Add Products</button>
+           <div className="w-full  flex justify-end ">
+               <button className="bg-green-300 text-black shadow-sm font-semibold p-4 rounded-md cursor-pointer " onClick={handleAddProduct}>Add Products</button>
            </div>
            {isAddModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -56,6 +56,7 @@ const Products = () => {
                             <tr>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">ID</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Product Name</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Product Image</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Price</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Stock</th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Actions</th>
@@ -66,7 +67,8 @@ const Products = () => {
                                 <tr key={product.id} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.id}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${product.price}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><img src={product.image || 'https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg?semt=ais_hybrid&w=740&q=80'} alt={product.name} className="h-12 w-12 object-cover"/></td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">£{product.price}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.stock}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         <button 

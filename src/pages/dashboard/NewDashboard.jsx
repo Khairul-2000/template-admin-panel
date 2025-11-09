@@ -121,7 +121,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen  p-6">
       {/* Header Section */}
       <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
         <p className="text-gray-600 text-sm">{userData.greeting}</p>
@@ -346,7 +346,7 @@ const Dashboard = () => {
         </div>
 
         {/* Upload Product Section */}
-        <div className="bg-white rounded-lg p-6 shadow-sm">
+        {/* <div className="bg-white rounded-lg p-6 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Upload Product</h3>
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-8">
             <div className="flex flex-col items-center">
@@ -366,7 +366,7 @@ const Dashboard = () => {
               </label>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

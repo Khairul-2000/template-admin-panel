@@ -75,7 +75,13 @@ const Dashboard = () => {
     { month: 'Mar', orders: 78 },
     { month: 'Apr', orders: 110 },
     { month: 'May', orders: 125 },
-    { month: 'Jun', orders: 145 }
+    { month: 'Jun', orders: 145 },
+    { month: 'Jul', orders: 130 },
+    { month: 'Aug', orders: 150 },
+    { month: 'Sep', orders: 170 },
+    { month: 'Oct', orders: 160 },
+    { month: 'Nov', orders: 180 },
+    { month: 'Dec', orders: 200 }
   ];
 
   // Mock data for earnings chart
@@ -85,7 +91,13 @@ const Dashboard = () => {
     { month: 'Mar', earnings: 11200 },
     { month: 'Apr', earnings: 18900 },
     { month: 'May', earnings: 22100 },
-    { month: 'Jun', earnings: 25400 }
+    { month: 'Jun', earnings: 25400 },
+    { month: 'Jul', earnings: 23000 },
+    { month: 'Aug', earnings: 27500 },
+    { month: 'Sep', earnings: 30000 },
+    { month: 'Oct', earnings: 28000 },
+    { month: 'Nov', earnings: 32000 },
+    { month: 'Dec', earnings: 35000 }
   ];
 
   const ordersStats = {

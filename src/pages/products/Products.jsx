@@ -1,145 +1,201 @@
-import React, {useState} from "react";
-import AddProducts from "../../components/AddProducts";
+import {
+  Avatar,
+  Image,
+  message,
+  Modal,
+  Space,
+  Table,
+  Input,
+  Button,
+} from "antd";
+import IsError from "../../components/IsError";
+import IsLoading from "../../components/IsLoading";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import { API, useAllProducts } from "../../api/api";
+import { useState } from "react";
+import AddProduct from "./AddProduct";
+import EditProduct from "./EditProduct";
 
+function Products() {
+  const [filter, setFilter] = useState({
+    page: 1,
+    limit: 10,
+    search: "",
+  });
 
+  const [searchInput, setSearchInput] = useState("");
 
-const Products = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const { allProducts, isLoading, isError, error, refetch } =
+    useAllProducts(filter);
 
+  const handleSearch = () => {
+    setFilter((prev) => ({
+      ...prev,
+      search: searchInput,
+      page: 1,
+    }));
+  };
 
-    const handleEdit = (product) => {
-        setSelectedProduct(product);
-        setIsModalOpen(true);
-    };
+  // 🗑️ delete confirm modal
+  const showDeleteConfirm = (productId) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this product?",
+      content: "This action cannot be undone.",
+      okText: "Yes, Delete",
+      okType: "danger",
+      cancelText: "Cancel",
+      async onOk() {
+        try {
+          await API.delete(`/api/shop/products/${productId}/`);
+          message.success("Product deleted successfully!");
+          refetch();
+        } catch (err) {
+          console.log(err, "error");
+          message.error(
+            err.response?.data?.error || "Failed to delete product"
+          );
+        }
+      },
+    });
+  };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setSelectedProduct(null);
-    };
-
-    const handleAddProduct = () => {
-        setIsAddModalOpen(true);
-    }
-
-    const handleSave = (e) => {
-        e.preventDefault();
-        // Add your save logic here
-        console.log('Saving product:', selectedProduct);
-        handleCloseModal();
-    };
-
-    const products = [
-        { id: 1, name: 'Product 1', price: 99.99, stock: 50 },
-        { id: 2, name: 'Product 2', price: 149.99, stock: 30 }
-    ];
-
-    return (
-        <div className="p-6">
-            <div>
-                <h1 className="text-2xl font-bold mb-4">Products Page</h1>
-                <p>Welcome to the Products page. Here you can manage your products.</p>
-            </div>
-           <div className="w-full  flex justify-end ">
-               <button className="bg-green-300 text-black shadow-sm font-semibold p-4 rounded-md cursor-pointer " onClick={handleAddProduct}>Add Products</button>
-           </div>
-           {isAddModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <AddProducts isModalOpen={isAddModalOpen} setIsModalOpen={setIsAddModalOpen} />
-                </div>
-            )}
-            <div>
-                <div className="mt-6 overflow-x-auto">
-                    <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
-                        <thead className="bg-gray-100">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">ID</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Product Name</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Product Image</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Price</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Stock</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {products.map((product) => (
-                                <tr key={product.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.id}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><img src={product.image || 'https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg?semt=ais_hybrid&w=740&q=80'} alt={product.name} className="h-12 w-12 object-cover"/></td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">£{product.price}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.stock}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                        <button 
-                                            onClick={() => handleEdit(product)}
-                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors"
-                                        >
-                                            Edit
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* Edit Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                        <h2 className="text-xl font-bold mb-4">Edit Product</h2>
-                        <form onSubmit={handleSave}>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
-                                <input
-                                    type="text"
-                                    value={selectedProduct?.name || ''}
-                                    onChange={(e) => setSelectedProduct({...selectedProduct, name: e.target.value})}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Price</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    value={selectedProduct?.price || ''}
-                                    onChange={(e) => setSelectedProduct({...selectedProduct, price: parseFloat(e.target.value)})}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Stock</label>
-                                <input
-                                    type="number"
-                                    value={selectedProduct?.stock || ''}
-                                    onChange={(e) => setSelectedProduct({...selectedProduct, stock: parseInt(e.target.value)})}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div className="flex justify-end gap-2">
-                                <button
-                                    type="button"
-                                    onClick={handleCloseModal}
-                                    className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"
-                                >
-                                    Save
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+  const columns = [
+    {
+      title: <span>Sl no.</span>,
+      dataIndex: "id",
+      key: "id",
+      render: (_, record, index) => (
+        <span>#{filter.limit * (filter.page - 1) + (index + 1)}</span>
+      ),
+    },
+    {
+      title: <span>Product</span>,
+      dataIndex: "name",
+      key: "name",
+      render: (_, record) => (
+        <div className="flex gap-2 items-center">
+          <Image
+            width={40}
+            height={40}
+            src={record?.image}
+            alt={record?.name}
+            style={{ objectFit: "cover", borderRadius: "4px" }}
+          />
+          <h2>{record?.name}</h2>
         </div>
-    );
-};
+      ),
+    },
+    {
+      title: <span>Description</span>,
+      dataIndex: "description",
+      key: "description",
+      render: (description) => <span>{description || "N/A"}</span>,
+    },
+    {
+      title: <span>Price</span>,
+      dataIndex: "price",
+      key: "price",
+      render: (price) => <span className="font-semibold">৳{price}</span>,
+    },
+    {
+      title: <span>Stock</span>,
+      dataIndex: "stock",
+      key: "stock",
+      render: (stock) => (
+        <span className={stock > 0 ? "text-green-600" : "text-red-600"}>
+          {stock} {stock > 0 ? "available" : "out of stock"}
+        </span>
+      ),
+    },
+    {
+      title: <span>UOM</span>,
+      dataIndex: "uom",
+      key: "uom",
+      render: (uom) => <span className="uppercase">{uom}</span>,
+    },
+    {
+      title: <span>Status</span>,
+      dataIndex: "is_active",
+      key: "is_active",
+      render: (is_active) => (
+        <span className={is_active ? "text-green-600" : "text-gray-400"}>
+          {is_active ? "Active" : "Inactive"}
+        </span>
+      ),
+    },
+    {
+      title: <span>Action</span>,
+      key: "action",
+      render: (_, record) => {
+        return (
+          <Space size="middle">
+            <EditProduct product={record} refetch={refetch} />
+
+            <DeleteOutlined
+              className="text-[23px] bg-[#E30000] p-1 rounded-sm text-white hover:bg-red-600 cursor-pointer"
+              onClick={() => showDeleteConfirm(record.id)}
+            />
+          </Space>
+        );
+      },
+    },
+  ];
+
+  const handleTableChange = (pagination) => {
+    setFilter((prev) => ({
+      ...prev,
+      page: pagination.current,
+      limit: pagination.pageSize,
+    }));
+  };
+
+  if (isLoading) return <IsLoading />;
+  if (isError) return <IsError error={error} refetch={refetch} />;
+
+  return (
+    <div className="p-4">
+      <div className="flex justify-between mb-4">
+        {/* Search Bar */}
+        <div className="flex items-center gap-2">
+          <Input
+            size="large"
+            placeholder="Search products by name..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onPressEnter={handleSearch}
+            allowClear
+            style={{ width: 300 }}
+            suffix={
+              <SearchOutlined
+                onClick={handleSearch}
+                className="cursor-pointer"
+              />
+            }
+          />
+        </div>
+        <AddProduct refetch={refetch} />
+      </div>
+
+      <Table
+        columns={columns}
+        dataSource={allProducts?.results || []}
+        rowKey="id"
+        pagination={{
+          current: filter.page,
+          pageSize: filter.limit,
+          total: allProducts?.count || 0,
+          showSizeChanger: false,
+          pageSizeOptions: ["10", "20", "50", "100"],
+        }}
+        onChange={handleTableChange}
+        loading={isLoading}
+      />
+    </div>
+  );
+}
 
 export default Products;

@@ -1,35 +1,26 @@
-import React, { useState } from "react";
-import { Table, Tag, Button, Modal, Select, message, Input, InputNumber } from "antd";
+import { useState } from "react";
+import {
+  Table,
+  Tag,
+  Button,
+  Modal,
+  Select,
+  message,
+  Input,
+  InputNumber,
+} from "antd";
 import IsError from "../../components/IsError";
 import IsLoading from "../../components/IsLoading";
 import { EditOutlined } from "@ant-design/icons";
-import { useAllMockFoodOrders } from "../../api/api";
-import { useLocation, useNavigate } from "react-router-dom";
+import { API, useAllFoodOrders } from "../../api/api";
 import OrderDetails from "./OrderDetails";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo.png";
 
 function ProductOrders() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const queryParams = new URLSearchParams(location.search);
-  const currentFilter = queryParams.get("filter") || "All";
-
   const [filter, setFilter] = useState({
     page: 1,
     limit: 10,
   });
-
-  // Driver assignment modal states
-  const [isDriverAssignModalOpen, setIsDriverAssignModalOpen] = useState(false);
-  const [selectedDriver, setSelectedDriver] = useState(null);
-
-  // Paid Status change modal states
-  const [isPaidStatusModalOpen, setIsPaidStatusModalOpen] = useState(false);
-  const [selectedPaidStatus, setSelectedPaidStatus] = useState(null);
-  const [newPaidStatus, setNewPaidStatus] = useState("");
-  const [isPaidStatusChangeLoading, setIsPaidStatusChangeLoading] =
-    useState(false);
 
   // Status change modal states
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
@@ -44,70 +35,14 @@ function ProductOrders() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [editDeliveryAddress, setEditDeliveryAddress] = useState("");
-  const [editEstimatedDeliveryDate, setEditEstimatedDeliveryDate] = useState("");
+  const [editEstimatedDeliveryDate, setEditEstimatedDeliveryDate] =
+    useState("");
   const [editDeliveryFee, setEditDeliveryFee] = useState(0);
   const [editItems, setEditItems] = useState([]);
   const [isEditLoading, setIsEditLoading] = useState(false);
 
-  const {
-    allMockFoodOrders,
-    pagination = {},
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useAllMockFoodOrders(filter);
-
-
-  console.log("allMockFoodOrdersallMockFoodOrders", allMockFoodOrders);
-
-  // Driver assignment modal
-  const openDriverAssignModal = (record) => {
-    setSelectedDriver(record.driver); // Set existing driver if any
-    setIsDriverAssignModalOpen(true);
-  };
-
-  const handleDriverAssignChange = async () => {
-    if (!selectedDriver) return;
-
-    try {
-      message.success("Driver assigned successfully!");
-
-      console.log("selectedDriverselectedDriver", selectedDriver);
-
-      setIsDriverAssignModalOpen(false);
-      refetch();
-    } catch (err) {
-      message.error("Failed to assign driver");
-    }
-  };
-
-  // paid status model
-  const openPaidStatusModal = (record) => {
-    setSelectedPaidStatus(record);
-    setNewPaidStatus(record.status); // default current status
-    setIsPaidStatusModalOpen(true);
-  };
-
-  const handlePaidStatusChange = async () => {
-    if (!selectedPaidStatus) return;
-
-    setIsPaidStatusChangeLoading(true);
-
-    try {
-      message.success("User paid status updated successfully!");
-      setIsPaidStatusModalOpen(false);
-      setSelectedPaidStatus(null);
-      setNewPaidStatus("");
-      refetch();
-    } catch (err) {
-      message.error(
-        err.response?.data?.error || "Failed to update User paid status"
-      );
-    } finally {
-      setIsPaidStatusChangeLoading(false);
-    }
-  };
+  const { allFoodOrders, isLoading, isError, error, refetch } =
+    useAllFoodOrders(filter);
 
   // status change modal
   const openStatusModal = (record) => {
@@ -144,7 +79,9 @@ function ProductOrders() {
         items: editItems,
         // Recalculate totals
         total_quantity: editItems.reduce((sum, item) => sum + item.quantity, 0),
-        total_price: editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + editDeliveryFee,
+        total_price:
+          editItems.reduce((sum, item) => sum + item.price * item.quantity, 0) +
+          editDeliveryFee,
       };
 
       console.log("Updated order data:", updatedOrder);
@@ -165,23 +102,23 @@ function ProductOrders() {
   };
 
   const handleItemQuantityChange = (itemId, newQuantity) => {
-    setEditItems(prevItems =>
-      prevItems.map(item =>
+    setEditItems((prevItems) =>
+      prevItems.map((item) =>
         item.id === itemId ? { ...item, quantity: newQuantity } : item
       )
     );
   };
 
   const handleItemPriceChange = (itemId, newPrice) => {
-    setEditItems(prevItems =>
-      prevItems.map(item =>
+    setEditItems((prevItems) =>
+      prevItems.map((item) =>
         item.id === itemId ? { ...item, price: newPrice } : item
       )
     );
   };
 
   const handleRemoveItem = (itemId) => {
-    setEditItems(prevItems => prevItems.filter(item => item.id !== itemId));
+    setEditItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   };
 
   const handleStatusChange = async () => {
@@ -190,12 +127,24 @@ function ProductOrders() {
     setIsStatusChangeLoading(true);
 
     try {
+      const payload = {
+        status: newStatus,
+      };
+
+      const res = await API.patch(
+        `/api/shop/admin/orders/update/${selectedStatus.id}/`,
+        payload
+      );
+
+      console.log("res", res);
+
       message.success("User status updated successfully!");
       setIsStatusModalOpen(false);
       setSelectedStatus(null);
       setNewStatus("");
       refetch();
     } catch (err) {
+      console.log(err, "error");
       message.error(
         err.response?.data?.error || "Failed to update User status"
       );
@@ -212,64 +161,49 @@ function ProductOrders() {
     }));
   };
 
-  const handleFilterChange = (type) => {
-    if (type === "All") {
-      navigate("/food-orders");
-    } else {
-      navigate(`/food-orders?filter=${type}`);
-    }
-  };
-
   const columns = [
     {
       title: <span>Sl no.</span>,
       dataIndex: "serial_number",
       key: "serial_number",
       align: "center",
-      render: (_, record, index) => <span>#{index + 1}</span>,
+      render: (_, record, index) => (
+        <span>#{filter.limit * (filter.page - 1) + (index + 1)}</span>
+      ),
     },
     {
       title: <span>User</span>,
-      dataIndex: "user",
-      key: "user",
+      dataIndex: "customer_name",
+      key: "customer_name",
       align: "center",
       render: (_, record) => (
         <div className="flex flex-col items-center justify-center gap-1">
-          <h1 className="font-medium">{record.user.name}</h1>
-          <p className="text-sm text-gray-600">
-            {record.user.email}
-          </p>
+          <h1 className="font-medium">{record?.customer_name}</h1>
+          <p className="text-sm text-gray-600">{record?.email}</p>
         </div>
       ),
     },
 
     {
       title: <span>Phone</span>,
-      dataIndex: "contact_number",
-      key: "contact_number",
+      dataIndex: "phone_number",
+      key: "phone_number",
       align: "center",
-      render: (contact_number) => <span>{contact_number}</span>,
+      render: (phone_number) => <span>{phone_number}</span>,
     },
     {
       title: <span>Delivery Address</span>,
-      dataIndex: "delivery_address",
-      key: "delivery_address",
+      dataIndex: "address",
+      key: "address",
       align: "center",
-      render: (delivery_address) => <span>{delivery_address}</span>,
-    },
-     {
-      title: <span>Estimated Delivery Date</span>,
-      dataIndex: "estimated_delivery_date",
-      key: "estimated_delivery_date",
-      align: "center",
-      render: (estimated_delivery_date) => <span>{estimated_delivery_date}</span>,
+      render: (address) => <span>{address}</span>,
     },
     {
       title: <span>Amount</span>,
-      dataIndex: "total_price",
-      key: "total_price",
+      dataIndex: "total",
+      key: "total",
       align: "center",
-      render: (total_price) => <span>£{total_price.toFixed(2)}</span>,
+      render: (total) => <span>£{total}</span>,
     },
 
     {
@@ -282,11 +216,15 @@ function ProductOrders() {
           <Tag
             className="p-0.5 px-3"
             color={
-              status === "Delivered"
+              status === "Pending"
+                ? "orange"
+                : status === "Processing"
+                ? "blue"
+                : status === "Cancelled"
+                ? "red"
+                : status === "Completed"
                 ? "green"
-                : status === "On Going"
-                  ? "blue"
-                  : "orange"
+                : "default"
             }
           >
             {status}
@@ -313,7 +251,6 @@ function ProductOrders() {
       align: "center",
       render: (_, record) => <OrderDetails record={record} refetch={refetch} />,
     },
-
 
     {
       title: <span>Action</span>,
@@ -343,14 +280,13 @@ function ProductOrders() {
   return (
     <div className="p-4">
       <Table
-      
         columns={columns}
-        dataSource={allMockFoodOrders}
-        rowKey="_id"
+        dataSource={allFoodOrders?.data?.results || []}
+        rowKey="id"
         pagination={{
           current: filter.page,
           pageSize: filter.limit,
-          total: pagination.totalPayments || 0,
+          total: allFoodOrders?.data?.count || 0,
           showSizeChanger: false,
           pageSizeOptions: ["10", "20", "50", "100"],
         }}
@@ -374,14 +310,15 @@ function ProductOrders() {
           style={{ width: "100%" }}
         >
           <Select.Option value="Pending">Pending</Select.Option>
-          <Select.Option value="Delivered">Delivered</Select.Option>
+          <Select.Option value="Processing">Processing</Select.Option>
+          <Select.Option value="Shipped">Shipped</Select.Option>
+          <Select.Option value="Completed">Completed</Select.Option>
           <Select.Option value="Cancelled">Cancelled</Select.Option>
         </Select>
       </Modal>
 
       {/* Edit order modal */}
       <Modal
-
         open={isEditModalOpen}
         onOk={handleEditSubmit}
         onCancel={() => setIsEditModalOpen(false)}
@@ -391,12 +328,10 @@ function ProductOrders() {
         width={600}
       >
         <div className="space-y-4">
-
           <div className="flex flex-col justify-center items-center  gap-4  p-4">
             <img src={logo} alt="logo" className="h-[30px] object-contain" />
             <h1 className="font-bold text-4xl">Order Details</h1>
           </div>
-
 
           <div className=" p-4">
             {/* Contact Information */}
@@ -412,7 +347,6 @@ function ProductOrders() {
                 className="w-1/2 border-none"
               />
             </div>
-
 
             {/* Email */}
             <div className="flex flex-row items-center justify-center gap-3 mb-3">
@@ -438,12 +372,13 @@ function ProductOrders() {
 
             {/* Order Address */}
             <div className="flex flex-row items-center justify-center gap-3 mb-3">
-              <label className="block mb-1 font-medium w-1/2">Order Address</label>
+              <label className="block mb-1 font-medium w-1/2">
+                Order Address
+              </label>
               <Input
                 value={editDeliveryAddress}
                 onChange={(e) => setEditDeliveryAddress(e.target.value)}
                 placeholder="Enter order address"
-
                 className="w-1/2 border-none"
               />
             </div>
@@ -451,14 +386,12 @@ function ProductOrders() {
 
           {/* Order Details */}
           <div className="">
-
             <div>
               <h1 className="text-2xl font-bold">Order Details</h1>
             </div>
 
             {/* Order Items */}
             <div>
-              
               <div className="space-y-3 max-h-60 overflow-y-auto">
                 {editItems.map((item, index) => (
                   <div
@@ -470,16 +403,22 @@ function ProductOrders() {
                     </div>
                     <div className="flex items-center  gap-2">
                       <div>
-                        <label className="block text-xs text-gray-600 mb-1">Qty</label>
+                        <label className="block text-xs text-gray-600 mb-1">
+                          Qty
+                        </label>
                         <InputNumber
                           min={1}
                           value={item.quantity}
-                          onChange={(value) => handleItemQuantityChange(item.id, value)}
+                          onChange={(value) =>
+                            handleItemQuantityChange(item.id, value)
+                          }
                           style={{ width: "70px" }}
                         />
                       </div>
                       <div className="">
-                        <label className="block text-xs text-gray-600 mb-1">Price</label>
+                        <label className="block text-xs text-gray-600 mb-1">
+                          Price
+                        </label>
                         <p>£{item.price.toFixed(2)}</p>
                         {/* <InputNumber
                           min={0}
@@ -530,17 +469,28 @@ function ProductOrders() {
               <div className="flex justify-between text-sm mb-1">
                 <span>Subtotal:</span>
                 <span className="font-medium">
-                  £{editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}
+                  £
+                  {editItems
+                    .reduce((sum, item) => sum + item.price * item.quantity, 0)
+                    .toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-sm mb-1">
                 <span>Delivery Fee:</span>
-                <span className="font-medium">£{editDeliveryFee.toFixed(2)}</span>
+                <span className="font-medium">
+                  £{editDeliveryFee.toFixed(2)}
+                </span>
               </div>
               <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
                 <span>Total:</span>
                 <span className="text-blue-600">
-                  £{(editItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) + editDeliveryFee).toFixed(2)}
+                  £
+                  {(
+                    editItems.reduce(
+                      (sum, item) => sum + item.price * item.quantity,
+                      0
+                    ) + editDeliveryFee
+                  ).toFixed(2)}
                 </span>
               </div>
             </div>

@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+export const BASE_URL = "http://10.10.7.76:14009";
+
 export const API = axios.create({
-  baseURL: "http://10.10.7.76:14009/api",
-  // baseURL: "http://103.186.20.115:9001/api",
+  baseURL: BASE_URL,
 });
 
 API.interceptors.request.use((config) => {
@@ -15,9 +16,72 @@ API.interceptors.request.use((config) => {
 });
 
 // get admin dashboard
+export const useDashboard = () => {
+  const getData = async () => {
+    const response = await API.get("/api/shop/dashboard/");
+    return response.data;
+  };
+
+  const {
+    data: dashboardData = null,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["dashboardData"],
+    queryFn: getData,
+  });
+
+  return { dashboardData, isLoading, isError, error, refetch };
+};
+
+// get low stock
+export const useLowStock = () => {
+  const getData = async () => {
+    const response = await API.get("/api/shop/low-stock-products/");
+    return response.data?.data;
+  };
+
+  const {
+    data: lowStock = null,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["lowStock"],
+    queryFn: getData,
+  });
+
+  return { lowStock, isLoading, isError, error, refetch };
+};
+
+// get Earnings
+export const useEarnings = () => {
+  const getData = async () => {
+    const response = await API.get("/api/shop/total-earnings/");
+    return response.data;
+  };
+
+  const {
+    data: earnsData = null,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["earnsData"],
+    queryFn: getData,
+  });
+
+  return { earnsData, isLoading, isError, error, refetch };
+};
+
+// get admin dashboard
 export const useAdminDashboard = () => {
   const getData = async () => {
-    const response = await API.get("/admin/dashboard/");
+    const response = await API.get("/api/auth/user/");
     return response.data;
   };
 
@@ -41,123 +105,126 @@ export const signOutAdmin = () => {
   window.location.href = "/login";
 };
 
-// users list
-export const getMockUsers = async ({ page = 1, limit = 10 }) => {
-  const res = await axios.get("/users_100.json");
-  const allUsers = res.data || [];
-
-  // Fake filtering (if status or role is provided)
-  let filteredUsers = allUsers;
-
-  // Fake pagination
-  const totalUser = filteredUsers.length;
-  const totalPages = Math.ceil(totalUser / limit);
-  const paginatedUsers = filteredUsers.slice((page - 1) * limit, page * limit);
-
-  return {
-    data: paginatedUsers,
-    pagination: {
-      totalUser,
-      page,
-      limit,
-      totalPages,
-    },
-  };
-};
-
-// get all users
-export const useUsers = ({ page = 1, limit = 10 }) => {
-  const getData = async () => {
-    const response = await API.get(`/admin/users/?page=${page}&limit=${limit}`);
-
-    return response.data;
-  };
-
-  const {
-    data: users = [],
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["users", page, limit],
-    queryFn: getData,
-  });
-
-  return { users, isLoading, isError, error, refetch };
-};
-
-
-
-// get all admin
-export const useAllAdmins = () => {
-  const getData = async () => {
-    const response = await API.get("/admin/administrators/");
-    return response.data;
-  };
-
-  const {
-    data: allAdmins = null,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["allAdmins"],
-    queryFn: getData,
-  });
-
-  return { allAdmins, isLoading, isError, error, refetch };
-};
-
-
-// administrators
-export const getMockAdministrators = async () => {
-  const response = await axios.get("/administrators_8.json");
-
-  return response.data;
-};
-
-
-
-
-
-
-
 // get all food-orders
-export const useAllMockFoodOrders = ({ page = 1, limit = 10 }) => {
-  const getData = async ({ page = 1, limit = 10 }) => {
-    const res = await axios.get("/foodOrder.json");
-    const allData = res.data || [];
-
-    // Fake pagination
-    const totalPayments = allData.length;
-    const totalPages = Math.ceil(totalPayments / limit);
-    const paginatedPayments = allData.slice((page - 1) * limit, page * limit);
-
-    return {
-      data: paginatedPayments,
-      pagination: {
-        totalPayments,
+export const useAllFoodOrders = ({ page = 1, limit = 10 }) => {
+  const getData = async () => {
+    const response = await API.get(`/api/shop/admin/orders/`, {
+      params: {
         page,
         limit,
-        totalPages,
       },
-    };
+    });
+
+    return response.data;
   };
 
   const {
-    data: response = {},
+    data: allFoodOrders = [],
     isLoading,
     isError,
     error,
     refetch,
   } = useQuery({
-    queryKey: ["allMockFoodOrders", page, limit],
+    queryKey: ["allFoodOrders", page, limit],
     queryFn: getData,
   });
 
-  const { data: allMockFoodOrders = [], pagination = {} } = response;
+  return { allFoodOrders, isLoading, isError, error, refetch };
+};
 
-  return { allMockFoodOrders, pagination, isLoading, isError, error, refetch };
+// get all Users
+export const useAllUsers = ({ page = 1, limit = 10 }) => {
+  const getData = async () => {
+    const response = await API.get(`/api/auth/user/list/`, {
+      params: {
+        page,
+        limit,
+      },
+    });
+
+    return response.data;
+  };
+
+  const {
+    data: allUserList = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["allUserList", page, limit],
+    queryFn: getData,
+  });
+
+  return { allUserList, isLoading, isError, error, refetch };
+};
+
+// get all Products
+export const useAllProducts = ({ page = 1, limit = 10, search }) => {
+  const getData = async () => {
+    const response = await API.get(`/api/shop/admin/products/list/`, {
+      params: {
+        page,
+        limit,
+        search,
+      },
+    });
+
+    return response.data;
+  };
+
+  const {
+    data: allProducts = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["allProducts", page, limit, search],
+    queryFn: getData,
+  });
+
+  return { allProducts, isLoading, isError, error, refetch };
+};
+
+// get auth credential
+export const useAuthCredential = () => {
+  const getData = async () => {
+    const response = await API.get("/api/auth/cretiential/");
+    return response.data;
+  };
+
+  const {
+    data: authCredential = null,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["authCredential"],
+    queryFn: getData,
+  });
+
+  return { authCredential, isLoading, isError, error, refetch };
+};
+
+// get Site Status
+export const useSiteStatus = () => {
+  const getData = async () => {
+    const response = await API.get("/api/auth/site/status/");
+    return response.data;
+  };
+
+  const {
+    data: siteStatusData = null,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["siteStatusData"],
+    queryFn: getData,
+  });
+
+  return { siteStatusData, isLoading, isError, error, refetch };
 };

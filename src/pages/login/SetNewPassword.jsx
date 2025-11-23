@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Button, Checkbox, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { API } from "../../api/api";
 
 const SetNewPassword = () => {
   const [loading, setLoading] = useState(false);
@@ -18,23 +19,33 @@ const SetNewPassword = () => {
     setLoading(true); // Start loading when submitting form
     try {
       console.log(values);
-      // const response = await API.post("/admin/set-new-password", {
-      //   password: values.password,
-      // });
+      const response = await API.post("/api/auth/set_new_password/", {
+        email: localStorage.getItem("email"),
+        code: localStorage.getItem("code"),
+        new_password: values.password,
+        new_password2: values.confirmPassword,
+      });
 
-      // // If successful, save the token in localStorage
-      // localStorage.setItem("token", response.data.data.token);
+      // If successful, save the token in localStorage
+      localStorage.setItem("token", response?.data?.tokens?.access);
 
       // Show success message
       message.success("Password updated successfully!");
 
       // Redirect to the admin dashboard (replace with your route)
-      navigate("/password-update-login");
+      navigate("/");
     } catch (error) {
+      console.log(error, "error");
       // Show error message
       message.error(
         "Password update failed. Please try again." // error.response?.data?.message
       );
+
+      if (
+        error?.response?.data?.non_field_errors == "Reset code has expired."
+      ) {
+        navigate("/forget-password");
+      }
     } finally {
       setLoading(false); // Stop loading after request
     }

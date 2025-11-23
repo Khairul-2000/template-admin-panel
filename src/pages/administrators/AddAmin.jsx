@@ -9,10 +9,11 @@ import {
   Upload,
   Avatar,
   Space,
+  Checkbox,
 } from "antd";
-import { UserOutlined, CameraOutlined, EditOutlined } from "@ant-design/icons";
+import { UserOutlined, CameraOutlined } from "@ant-design/icons";
 import { FaPlus } from "react-icons/fa";
-// import { API } from "../../api/api";
+import { API } from "../../api/api";
 
 const { Option } = Select;
 
@@ -53,28 +54,31 @@ const AddAdmin = ({ refetch }) => {
       setLoading(true);
 
       const formData = new FormData();
-      formData.append("name", values.name);
+      formData.append("full_name", values.full_name);
       formData.append("email", values.email);
-      formData.append("phone", values.phone);
-      formData.append("role", values.role);
+      formData.append("phone_number", values.phone_number);
+      formData.append("password", values.password);
+      formData.append("password2", values.password);
+      formData.append(
+        "is_superuser",
+        values.is_superuser === true ? true : false
+      );
 
       if (imageFile) {
         formData.append("profile", imageFile);
       }
 
-      console.log("Creating admin with data:", {
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        role: values.role,
-        hasImage: !!imageFile,
-      });
+      const response = await API.post(
+        "/api/auth/user/createsuperuser/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      // await API.post("/admin/administrators/create/", formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
+      console.log("response", response);
 
       message.success("Admin created successfully!");
       refetch?.();
@@ -83,6 +87,7 @@ const AddAdmin = ({ refetch }) => {
       setImageFile(null);
       setIsModalOpen(false);
     } catch (err) {
+      console.log(err, "error");
       message.error(err.response?.data?.detail || "Failed to create admin");
     } finally {
       setLoading(false);
@@ -179,7 +184,7 @@ const AddAdmin = ({ refetch }) => {
         <Form layout="vertical" onFinish={handleFinish}>
           <Form.Item
             label="Name"
-            name="name"
+            name="full_name"
             rules={[{ required: true, message: "Please enter admin name" }]}
           >
             <Input placeholder="Enter admin name" prefix={<UserOutlined />} />
@@ -198,21 +203,22 @@ const AddAdmin = ({ refetch }) => {
 
           <Form.Item
             label="Phone Number"
-            name="phone"
+            name="phone_number"
             rules={[{ required: true, message: "Please enter phone number" }]}
           >
             <Input placeholder="+880..." />
           </Form.Item>
 
           <Form.Item
-            label="Role"
-            name="role"
-            rules={[{ required: true, message: "Please select role" }]}
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Please enter password" }]}
           >
-            <Select placeholder="Select role">
-              <Option value="admin">Admin</Option>
-              <Option value="superadmin">Super Admin</Option>
-            </Select>
+            <Input.Password placeholder="Enter password" />
+          </Form.Item>
+
+          <Form.Item name="is_superuser" valuePropName="checked">
+            <Checkbox>Is Super Admin</Checkbox>
           </Form.Item>
 
           <Form.Item>

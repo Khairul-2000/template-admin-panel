@@ -33,8 +33,8 @@ const Sidebar = ({ onClick }) => {
     if (path === "/administrators") return ["3"];
     if (path === "/orders") return ["orders"];
     if (path === "/products") return ["products"];
-    if(path === "/settings") return ["settings"];
- 
+    if (path === "/settings") return ["settings"];
+
     return ["1"];
   };
 
@@ -65,22 +65,20 @@ const Sidebar = ({ onClick }) => {
 
     {
       key: "orders",
-      icon: <img src={orderIcon} alt="Orders" className="w-6" />,
+      icon: <MdOutlineProductionQuantityLimits className="!text-xl" />,
       label: <Link to="/orders">Orders</Link>,
     },
     {
       key: "products",
-      icon: <MdOutlineProductionQuantityLimits className="!text-xl" />,
+      icon: <img src={orderIcon} alt="Orders" className="w-6" />,
       label: <Link to="/products">Products</Link>,
+    },
 
-    },  
- 
     {
       key: "settings",
       icon: <MdOutlinePostAdd className="!text-xl" />,
       label: <Link to="/settings">Settings</Link>,
     },
-    
 
     // Add logout as a menu item at the bottom
     {

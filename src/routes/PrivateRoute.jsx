@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAdminDashboard } from "../api/api";
 import Loading from "../components/Loading";
+import { useAdminDashboard } from "../api/api";
 
 const PrivateRoute = ({ children }) => {
   const { adminDashboard, isLoading, isError, error, refetch } =

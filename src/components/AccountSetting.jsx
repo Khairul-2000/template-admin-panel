@@ -10,66 +10,61 @@ import {
   Upload,
   Space,
 } from "antd";
-// import { API } from "../api/api";
+import { API, BASE_URL } from "../api/api";
 
-const AccountSetting = ({ adminProfile }) => {
+const AccountSetting = ({ adminProfile, refetch }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [avatarLoading, setAvatarLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null); // নতুন সিলেক্ট করা ইমেজ স্টোর করার স্টেট
-  const [imageFile, setImageFile] = useState(null); // আসল ফাইল স্টোর করার জন্য
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
   const showModal = () => setIsModalOpen(true);
   const handleCancel = () => {
-    setSelectedImage(null); // মোডাল বন্ধ করলে সিলেক্ট করা ইমেজ রিসেট
+    setSelectedImage(null);
     setImageFile(null);
     setIsModalOpen(false);
   };
 
-  // ইমেজ সিলেক্ট হ্যান্ডলার
   const handleImageSelect = (file) => {
     setImageFile(file);
 
-    // ফাইল থেকে URL তৈরি করে প্রিভিউ দেখানোর জন্য
     const reader = new FileReader();
     reader.onload = (e) => {
       setSelectedImage(e.target.result);
     };
     reader.readAsDataURL(file);
 
-    return false; // অটো আপলোড বন্ধ করতে
+    return false;
   };
 
   const handleFinish = async (values) => {
     try {
       setLoading(true);
 
-      // FormData তৈরি করা
       const formData = new FormData();
-      formData.append("full_name", values.name);
+      formData.append("full_name", values.full_name);
       formData.append("email", values.email);
       formData.append("phone_number", values.phone_number);
 
-      // যদি নতুন ইমেজ সিলেক্ট করা থাকে তাহলে append করা
       if (imageFile) {
-        formData.append("profile", imageFile);
+        formData.append("profile_picture", imageFile);
       }
 
-      // API কল
-      // await API.put(`/profile/update/`, formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
+      await API.put(`/api/auth/profile/update/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       message.success("Profile updated successfully!");
-      // refetch(); // প্রোফাইল ডেটা রিফ্রেশ করতে হবে
+      refetch?.();
 
-      // স্টেট রিসেট
       setSelectedImage(null);
       setImageFile(null);
       setIsModalOpen(false);
     } catch (err) {
+      console.log(err, "error");
       message.error(err.response?.data?.detail || "Failed to update profile");
     } finally {
       setLoading(false);
@@ -111,7 +106,7 @@ const AccountSetting = ({ adminProfile }) => {
           <div className="relative mb-4">
             <Avatar
               size={100}
-              src={selectedImage || adminProfile?.profile}
+              src={selectedImage || BASE_URL + adminProfile?.profile_picture}
               icon={<UserOutlined />}
               className="border-2 border-gray-200"
             />
@@ -152,29 +147,21 @@ const AccountSetting = ({ adminProfile }) => {
           layout="vertical"
           onFinish={handleFinish}
           initialValues={{
-            name: adminProfile?.name,
+            full_name: adminProfile?.full_name,
             email: adminProfile?.email,
             phone_number: adminProfile?.phone_number,
-            role: adminProfile?.role,
           }}
         >
           <Form.Item
             label="Name"
-            name="name"
+            name="full_name"
             rules={[{ required: true, message: "Please enter your name" }]}
           >
             <Input prefix={<UserOutlined />} />
           </Form.Item>
 
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: "Please enter your email" },
-              { type: "email", message: "Please enter a valid email" },
-            ]}
-          >
-            <Input />
+          <Form.Item label="Email" name="email">
+            <Input disabled />
           </Form.Item>
 
           <Form.Item
@@ -185,10 +172,6 @@ const AccountSetting = ({ adminProfile }) => {
             ]}
           >
             <Input />
-          </Form.Item>
-
-          <Form.Item label="Role" name="role">
-            <Input disabled />
           </Form.Item>
 
           <Form.Item>

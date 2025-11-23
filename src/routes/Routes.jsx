@@ -38,7 +38,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <PrivateRoute>
+        <MainLayout />
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "/",
@@ -58,10 +62,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "/settings",
-        element:<Setting/>
+        element: <Setting />,
       },
-
-   
     ],
   },
 

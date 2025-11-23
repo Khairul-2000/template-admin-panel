@@ -11,12 +11,12 @@ import {
   Upload,
   Space,
 } from "antd";
-// import { API } from "../../api/api";
+import { API } from "../../api/api";
 
 const { Option } = Select;
 
 const AdminEdit = ({ adminProfile, refetch }) => {
-  const isSuperAdmin = adminProfile.role === "superadmin";
+  const isSuperAdmin = adminProfile?.is_superuser === true;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -48,30 +48,26 @@ const AdminEdit = ({ adminProfile, refetch }) => {
       const formData = new FormData();
       formData.append("full_name", values.full_name);
       formData.append("email", values.email);
-      formData.append("phone", values.phone);
+      formData.append("phone_number", values.phone_number);
       formData.append("role", values.role);
 
       if (imageFile) {
-        formData.append("profile", imageFile);
+        formData.append("profile_picture", imageFile);
       }
 
       console.log("Updating admin with data:", {
         full_name: values.full_name,
         email: values.email,
-        phone: values.phone,
+        phone_number: values.phone_number,
         role: values.role,
         hasNewImage: !!imageFile,
       });
 
-      // await API.put(
-      //   `/admin/administrators/${adminProfile.id}/update/`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //     },
-      //   }
-      // );
+      await API.put(`/api/user/profile/${adminProfile.id}/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       message.success("Admin updated successfully!");
       refetch();
@@ -123,7 +119,7 @@ const AdminEdit = ({ adminProfile, refetch }) => {
           <div className="relative mb-4">
             <Avatar
               size={100}
-              src={selectedImage || adminProfile?.profile}
+              src={selectedImage || adminProfile?.profile_picture}
               icon={<UserOutlined />}
               className="border-2 border-gray-200"
             />
@@ -167,8 +163,7 @@ const AdminEdit = ({ adminProfile, refetch }) => {
             id: adminProfile?.id,
             full_name: adminProfile?.full_name,
             email: adminProfile?.email,
-            phone: adminProfile?.phone,
-            role: adminProfile?.role,
+            phone_number: adminProfile?.phone_number,
           }}
         >
           <Form.Item
@@ -192,23 +187,12 @@ const AdminEdit = ({ adminProfile, refetch }) => {
 
           <Form.Item
             label="Phone Number"
-            name="phone"
+            name="phone_number"
             rules={[
               { required: true, message: "Please enter your phone number" },
             ]}
           >
             <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Role"
-            name="role"
-            rules={[{ required: true, message: "Please select a role" }]}
-          >
-            <Select placeholder="Select role">
-              <Option value="admin">Admin</Option>
-              <Option value="superadmin">Super Admin</Option>
-            </Select>
           </Form.Item>
 
           <Form.Item>

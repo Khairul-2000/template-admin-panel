@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { API } from "../../api/api";
 // import { API } from "../../api/api";
 
 const CheckCode = () => {
@@ -14,7 +15,13 @@ const CheckCode = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      console.log("values", values.otp);
+      const response = await API.post("/api/auth/verify_code/", {
+        email: email,
+        code: values.otp,
+      });
+
+      // If successful, save the token in localStorage
+      localStorage.setItem("code", values.otp);
 
       message.success("OTP verified successfully!");
 
@@ -36,9 +43,9 @@ const CheckCode = () => {
   const handleResend = async () => {
     setResendLoading(true);
     try {
-      // const response = await API.post("/password-reset-request/", {
-      //   email: email,
-      // });
+      const response = await API.post("/api/auth/forgot-password/", {
+        email: email,
+      });
 
       message.success("New OTP sent to your email!");
     } catch (error) {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Modal, Form, Input, message } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
-// import { API } from "../api/api";
+import { API } from "../api/api";
 
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,14 +13,15 @@ const ChangePassword = () => {
   const handleFinish = async (values) => {
     try {
       setLoading(true);
-      // const res = await API.post("/change-password/", {
-      //   old_password: values.old_password,
-      //   new_password: values.new_password,
-      //   retype_new_password: values.retype_new_password,
-      // });
+      const res = await API.post("/api/auth/change-password/", {
+        old_password: values.old_password,
+        new_password: values.new_password,
+        confirm_password: values.retype_new_password,
+      });
       message.success("Password changed successfully!");
       setIsModalOpen(false);
     } catch (err) {
+      console.log(err, "error");
       message.error(err.response?.data?.detail || "Failed to change password");
     } finally {
       setLoading(false);
@@ -81,7 +82,13 @@ const ChangePassword = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" className="my-main-button" htmlType="submit" loading={loading} block>
+            <Button
+              type="primary"
+              className="my-main-button"
+              htmlType="submit"
+              loading={loading}
+              block
+            >
               Change Password
             </Button>
           </Form.Item>

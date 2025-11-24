@@ -271,21 +271,7 @@ function ProductOrders() {
       ),
     },
 
-    {
-      title: <span>Edit</span>,
-      key: "action",
-      align: "center",
-      render: (_, record) => (
-        <div className="flex items-center justify-center gap-2">
-          <Button
-            size="small"
-            icon={<EditOutlined />}
-            onClick={() => openEditModal(record)}
-            title="Edit Order"
-          />
-        </div>
-      ),
-    },
+   
   ];
 
   if (isLoading) {

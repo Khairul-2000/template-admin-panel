@@ -86,7 +86,7 @@ function OrderDetails({ singleData, isVisible, onClose }) {
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-gray-800">
-                      ${item.price}
+                      £{item.price}
                     </p>
                   </div>
                 </div>
@@ -155,7 +155,7 @@ function OrderDetails({ singleData, isVisible, onClose }) {
                 <div className="flex justify-between py-2 bg-blue-50 px-3 rounded mt-2">
                   <span className="font-semibold text-lg">Total Amount:</span>
                   <span className="font-bold text-lg text-blue-600">
-                    ${singleOrder.total}
+                    £{singleOrder.total}
                   </span>
                 </div>
               </Col>

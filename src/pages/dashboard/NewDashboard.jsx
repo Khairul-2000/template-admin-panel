@@ -140,11 +140,11 @@ const Dashboard = () => {
               >
                 {monthOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
-                    {opt.label}
+                    {opt.label} 
                   </option>
                 ))}
               </select>
-              <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              {/* <FaChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" /> */}
             </div>
           </div>
 
@@ -182,7 +182,7 @@ const Dashboard = () => {
           <div className="px-6 py-4 bg-red-50 border-b border-red-100 flex items-center">
             <FaExclamationTriangle className="text-red-500 text-lg mr-3" />
             <h3 className="text-lg font-semibold text-red-700">
-              Items Requested by Customers
+              Items Low stock
             </h3>
           </div>
 
@@ -211,7 +211,7 @@ const Dashboard = () => {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Orders Chart */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <h3 className="text-lg font-semibold">Orders</h3>
@@ -239,7 +239,7 @@ const Dashboard = () => {
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <h3 className="text-lg font-semibold">Earnings</h3>
           <p className="text-2xl font-bold">
-            ${earningsStats.totalEarnings.toFixed(2)}
+            £{earningsStats.totalEarnings.toFixed(2)}
           </p>
 
           <div className="h-48 mt-4">

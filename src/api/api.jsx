@@ -105,6 +105,30 @@ export const signOutAdmin = () => {
   window.location.href = "/login";
 };
 
+
+
+// get all Seller
+export const useSellers = () => {
+  const getData = async () => {
+    const response = await API.get("/api/shop/sellers/");
+    return response.data;
+  };
+
+  const {
+    data: allSellers = null,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["allSellers"],
+    queryFn: getData,
+  });
+
+  return { allSellers, isLoading, isError, error, refetch };
+};
+
+
 // get all food-orders
 export const useAllFoodOrders = ({ page = 1, limit = 10 }) => {
   const getData = async () => {

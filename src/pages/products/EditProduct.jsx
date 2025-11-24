@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, InputNumber, Switch, Upload, Button, message } from "antd";
+import { Modal, Form, Input, InputNumber, Switch, Upload, Button, message, Select } from "antd";
 import { EditOutlined, UploadOutlined } from "@ant-design/icons";
 import { API } from "../../api/api";
 
@@ -155,7 +155,7 @@ function EditProduct({ product, refetch }) {
 
           <div className="grid grid-cols-2 gap-4">
             <Form.Item
-              label="Price (৳)"
+              label="Price (£)"
               name="price"
               rules={[{ required: true, message: "Please enter price" }]}
             >
@@ -188,7 +188,34 @@ function EditProduct({ product, refetch }) {
               name="uom"
               rules={[{ required: true, message: "Please enter UOM" }]}
             >
-              <Input placeholder="e.g., pcs, kg, ltr" size="large" />
+               <Select
+    placeholder="Select a uom"
+    options={[
+      {
+        value: 'pcs',
+        label: 'Pcs',
+      },
+      {
+        value: 'kg',
+        label: 'KG',
+      },
+      {
+        value: 'litre',
+        label: 'Litre',
+      },
+      {
+        value: "box",
+        label: "Box"
+      },
+      {
+        value: "pack",
+        label: "Pack"
+      }
+    ]}
+  />
+
+
+
             </Form.Item>
 
             <Form.Item label="Status" name="is_active" valuePropName="checked">

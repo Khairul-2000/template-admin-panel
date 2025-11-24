@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, InputNumber, Switch, Upload, Button, message } from "antd";
+import { Modal, Form, Input, InputNumber, Switch, Upload, Button, message, Select } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import { API } from "../../api/api";
+import { API, useSellers } from "../../api/api";
 
 function AddProduct({ refetch }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
+
+
+  const { allSellers } = useSellers()
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -21,7 +24,7 @@ function AddProduct({ refetch }) {
 
   const handleSubmit = async (values) => {
     setLoading(true);
-    
+
     console.log("Form Values:", values);
     console.log("Image File:", fileList[0]?.originFileObj);
 
@@ -32,8 +35,9 @@ function AddProduct({ refetch }) {
       formData.append("price", values.price);
       formData.append("stock", values.stock);
       formData.append("uom", values.uom);
+      formData.append("seller", values.seller)
       formData.append("is_active", values.is_active ? true : false);
-      
+
       if (fileList[0]?.originFileObj) {
         formData.append("image", fileList[0].originFileObj);
       }
@@ -83,6 +87,9 @@ function AddProduct({ refetch }) {
     },
     maxCount: 1,
   };
+
+
+  console.log("allSellers", allSellers)
 
   return (
     <>
@@ -136,7 +143,7 @@ function AddProduct({ refetch }) {
 
           <div className="grid grid-cols-2 gap-4">
             <Form.Item
-              label="Price (৳)"
+              label="Price (£)"
               name="price"
               rules={[{ required: true, message: "Please enter price" }]}
             >
@@ -164,18 +171,74 @@ function AddProduct({ refetch }) {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
+
+
             <Form.Item
               label="Unit of Measurement"
               name="uom"
               rules={[{ required: true, message: "Please enter UOM" }]}
             >
-              <Input placeholder="e.g., pcs, kg, ltr" size="large" />
+              <Select
+
+                placeholder="Select a uom"
+                options={[
+                  {
+                    value: 'pcs',
+                    label: 'Pcs',
+                  },
+                  {
+                    value: 'kg',
+                    label: 'KG',
+                  },
+                  {
+                    value: 'litre',
+                    label: 'Litre',
+                  },
+                  {
+                    value: "box",
+                    label: "Box"
+                  },
+                  {
+                    value: "pack",
+                    label: "Pack"
+                  }
+                ]}
+              />
+
+
+
             </Form.Item>
+
+
 
             <Form.Item label="Status" name="is_active" valuePropName="checked">
               <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
             </Form.Item>
           </div>
+
+
+
+          <Form.Item
+            label="Seller"
+            name="seller"
+            rules={[{ required: true, message: "Please enter Seller" }]}
+          >
+            <Select
+              placeholder="Select a seller"
+              options={
+                allSellers?.map((seller) => ({
+                  value: seller.id,
+                  label: seller.title,
+                }))
+              }
+            />
+
+
+
+          </Form.Item>
+
+
+
 
           <Form.Item label="Product Image">
             <Upload {...uploadProps} listType="picture">

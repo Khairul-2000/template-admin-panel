@@ -11,7 +11,7 @@ import {
 } from "antd";
 import IsError from "../../components/IsError";
 import IsLoading from "../../components/IsLoading";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { API, useAllFoodOrders } from "../../api/api";
 import OrderDetails from "./OrderDetails";
 import logo from "../../assets/logo.png";
@@ -28,6 +28,9 @@ function ProductOrders() {
   const [newStatus, setNewStatus] = useState("");
   const [isStatusChangeLoading, setIsStatusChangeLoading] = useState(false);
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
   // Edit order modal states
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedForEdit, setSelectedForEdit] = useState(null);
@@ -43,6 +46,16 @@ function ProductOrders() {
 
   const { allFoodOrders, isLoading, isError, error, refetch } =
     useAllFoodOrders(filter);
+
+  const showModal = (record) => {
+    setSelectedOrder(record);
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedOrder(null);
+  };
 
   // status change modal
   const openStatusModal = (record) => {
@@ -249,11 +262,17 @@ function ProductOrders() {
       title: <span>Details</span>,
       key: "Details",
       align: "center",
-      render: (_, record) => <OrderDetails record={record} refetch={refetch} />,
+      render: (_, record) => (
+        <EyeOutlined
+          onClick={() => showModal(record)}
+          className="text-blue-500 hover:text-blue-700 text-[25px] cursor-pointer transition-colors duration-200"
+          title="View Details"
+        />
+      ),
     },
 
     {
-      title: <span>Action</span>,
+      title: <span>Edit</span>,
       key: "action",
       align: "center",
       render: (_, record) => (
@@ -497,6 +516,12 @@ function ProductOrders() {
           </div>
         </div>
       </Modal>
+
+      <OrderDetails
+        singleData={selectedOrder}
+        isVisible={isModalVisible}
+        onClose={handleCancel}
+      />
     </div>
   );
 }

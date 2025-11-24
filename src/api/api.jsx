@@ -132,6 +132,29 @@ export const useAllFoodOrders = ({ page = 1, limit = 10 }) => {
   return { allFoodOrders, isLoading, isError, error, refetch };
 };
 
+// single order
+export const useSingleOrder = ({ orderID }, options = {}) => {
+  const getData = async ({ queryKey }) => {
+    const [_key, orderID] = queryKey;
+    const response = await API.get(`/api/shop/admin/orderdetails/${orderID}/`);
+    return response.data;
+  };
+
+  const {
+    data: singleOrder = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["singleOrder", orderID],
+    queryFn: getData,
+    enabled: !!orderID && (options.enabled ?? true),
+  });
+
+  return { singleOrder, isLoading, isError, error, refetch };
+};
+
 // get all Users
 export const useAllUsers = ({ page = 1, limit = 10 }) => {
   const getData = async () => {

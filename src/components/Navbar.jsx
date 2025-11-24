@@ -17,8 +17,6 @@ const Navbar = ({ showDrawer }) => {
     navigate("/login");
   };
 
-  console.log("adminDashboard", adminDashboard);
-
   const profileMenuItems = [
     {
       key: "adminProfile",

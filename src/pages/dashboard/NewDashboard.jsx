@@ -101,7 +101,7 @@ const Dashboard = () => {
       {/* Overview */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          User's Overview
+          Operation's Overview
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

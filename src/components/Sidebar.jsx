@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import { MdOutlineAdminPanelSettings, MdOutlinePostAdd } from "react-icons/md";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { MdSell } from "react-icons/md";
 
 import orderIcon from "../assets/order.png";
 
@@ -73,12 +74,20 @@ const Sidebar = ({ onClick }) => {
       icon: <img src={orderIcon} alt="Orders" className="w-6" />,
       label: <Link to="/products">Products</Link>,
     },
+    
+    {
+      key: "sellers",
+      icon: <MdSell className="!text-xl" />,
+      label: <Link to="/sellers">Sellers</Link>,
+    },
 
     {
       key: "settings",
       icon: <MdOutlinePostAdd className="!text-xl" />,
       label: <Link to="/settings">Settings</Link>,
     },
+
+
 
     // Add logout as a menu item at the bottom
     {

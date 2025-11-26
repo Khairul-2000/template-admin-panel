@@ -14,6 +14,7 @@ import PrivateRoute from "./PrivateRoute";
 import Orders from "../pages/orders/Orders";
 import Setting from "../pages/settings/setting";
 import Products from "../pages/products/Products";
+import SellerPage from "../pages/sellers/seller";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: "/products",
         element: <Products />,
+      },
+      {
+        path: "/sellers",
+        element: <SellerPage/>
       },
       {
         path: "/settings",

@@ -128,6 +128,69 @@ export const useSellers = () => {
   return { allSellers, isLoading, isError, error, refetch };
 };
 
+// get single seller
+export const useSingleSeller = (sellerId, options = {}) => {
+  const getData = async ({ queryKey }) => {
+    const [_key, id] = queryKey;
+    const response = await API.get(`/api/shop/sellers/${id}/`);
+    return response.data;
+  };
+
+  const {
+    data: sellerDetail = null,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["singleSeller", sellerId],
+    queryFn: getData,
+    enabled: !!sellerId && (options.enabled ?? true),
+  });
+
+  return { sellerDetail, isLoading, isError, error, refetch };
+};
+
+// create seller
+export const createSeller = async (sellerData) => {
+  const formData = new FormData();
+  formData.append("title", sellerData.title);
+  formData.append("description", sellerData.description);
+  if (sellerData.image) {
+    formData.append("image", sellerData.image);
+  }
+
+  const response = await API.post("/api/shop/sellers/", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+// update seller
+export const updateSeller = async (sellerId, sellerData) => {
+  const formData = new FormData();
+  formData.append("title", sellerData.title);
+  formData.append("description", sellerData.description);
+  if (sellerData.image && typeof sellerData.image !== 'string') {
+    formData.append("image", sellerData.image);
+  }
+
+  const response = await API.put(`/api/shop/sellers/${sellerId}/`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+// delete seller
+export const deleteSeller = async (sellerId) => {
+  const response = await API.delete(`/api/shop/sellers/${sellerId}/`);
+  return response.data;
+};
+
 
 // get all food-orders
 export const useAllFoodOrders = ({ page = 1, limit = 10 }) => {

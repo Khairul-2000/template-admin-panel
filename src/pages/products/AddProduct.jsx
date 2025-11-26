@@ -9,8 +9,7 @@ function AddProduct({ refetch }) {
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
 
-
-  const { allSellers } = useSellers()
+  const { allSellers } = useSellers();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -26,6 +25,7 @@ function AddProduct({ refetch }) {
     setLoading(true);
 
     console.log("Form Values:", values);
+    console.log("File List:", fileList);
     console.log("Image File:", fileList[0]?.originFileObj);
 
     try {
@@ -35,11 +35,13 @@ function AddProduct({ refetch }) {
       formData.append("price", values.price);
       formData.append("stock", values.stock);
       formData.append("uom", values.uom);
-      formData.append("seller", values.seller)
+      formData.append("seller", values.seller);
       formData.append("is_active", values.is_active ? true : false);
 
-      if (fileList[0]?.originFileObj) {
-        formData.append("image", fileList[0].originFileObj);
+      // Fixed: Access the file correctly
+      const imageFile = fileList[0]?.originFileObj || fileList[0];
+      if (imageFile && imageFile instanceof File) {
+        formData.append("image", imageFile);
       }
 
       // Console log all form data
@@ -47,11 +49,8 @@ function AddProduct({ refetch }) {
         console.log(pair[0] + ": " + pair[1]);
       }
 
-      const response = await API.post("/api/shop/products/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      // Let axios set Content-Type automatically with boundary
+      const response = await API.post("/api/shop/products/", formData);
 
       console.log("API Response:", response.data);
 
@@ -78,7 +77,15 @@ function AddProduct({ refetch }) {
         message.error("Image must be smaller than 5MB!");
         return false;
       }
-      setFileList([file]);
+      // Fixed: Store as an object with originFileObj property
+      setFileList([
+        {
+          uid: file.uid || Date.now().toString(),
+          name: file.name,
+          status: "done",
+          originFileObj: file,
+        },
+      ]);
       return false;
     },
     fileList,
@@ -88,8 +95,7 @@ function AddProduct({ refetch }) {
     maxCount: 1,
   };
 
-
-  console.log("allSellers", allSellers)
+  console.log("allSellers", allSellers);
 
   return (
     <>
@@ -123,17 +129,12 @@ function AddProduct({ refetch }) {
           <Form.Item
             label="Product Name"
             name="name"
-            rules={[
-              { required: true, message: "Please enter product name" },
-            ]}
+            rules={[{ required: true, message: "Please enter product name" }]}
           >
             <Input placeholder="Enter product name" size="large" />
           </Form.Item>
 
-          <Form.Item
-            label="Description"
-            name="description"
-          >
+          <Form.Item label="Description" name="description">
             <Input.TextArea
               placeholder="Enter product description"
               rows={3}
@@ -171,52 +172,27 @@ function AddProduct({ refetch }) {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-
-
             <Form.Item
               label="Unit of Measurement"
               name="uom"
               rules={[{ required: true, message: "Please enter UOM" }]}
             >
               <Select
-
                 placeholder="Select a uom"
                 options={[
-                  {
-                    value: 'pcs',
-                    label: 'Pcs',
-                  },
-                  {
-                    value: 'kg',
-                    label: 'KG',
-                  },
-                  {
-                    value: 'litre',
-                    label: 'Litre',
-                  },
-                  {
-                    value: "box",
-                    label: "Box"
-                  },
-                  {
-                    value: "pack",
-                    label: "Pack"
-                  }
+                  { value: "pcs", label: "Pcs" },
+                  { value: "kg", label: "KG" },
+                  { value: "litre", label: "Litre" },
+                  { value: "box", label: "Box" },
+                  { value: "pack", label: "Pack" },
                 ]}
               />
-
-
-
             </Form.Item>
-
-
 
             <Form.Item label="Status" name="is_active" valuePropName="checked">
               <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
             </Form.Item>
           </div>
-
-
 
           <Form.Item
             label="Seller"
@@ -225,20 +201,12 @@ function AddProduct({ refetch }) {
           >
             <Select
               placeholder="Select a seller"
-              options={
-                allSellers?.map((seller) => ({
-                  value: seller.id,
-                  label: seller.title,
-                }))
-              }
+              options={allSellers?.map((seller) => ({
+                value: seller.id,
+                label: seller.title,
+              }))}
             />
-
-
-
           </Form.Item>
-
-
-
 
           <Form.Item label="Product Image">
             <Upload {...uploadProps} listType="picture">

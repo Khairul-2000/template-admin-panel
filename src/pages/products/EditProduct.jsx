@@ -47,6 +47,7 @@ function EditProduct({ product, refetch }) {
 
     console.log("Updated Form Values:", values);
     console.log("Product ID:", product.id);
+    console.log("File List:", fileList);
     console.log("New Image File:", fileList[0]?.originFileObj);
 
     try {
@@ -58,9 +59,10 @@ function EditProduct({ product, refetch }) {
       formData.append("uom", values.uom);
       formData.append("is_active", values.is_active ? true : false);
 
-      // Only append new image if a new file is uploaded
-      if (fileList[0]?.originFileObj) {
-        formData.append("image", fileList[0].originFileObj);
+      // Fixed: Only append new image if a new file is uploaded
+      const imageFile = fileList[0]?.originFileObj;
+      if (imageFile && imageFile instanceof File) {
+        formData.append("image", imageFile);
       }
 
       // Console log all form data
@@ -68,14 +70,10 @@ function EditProduct({ product, refetch }) {
         console.log(pair[0] + ": " + pair[1]);
       }
 
+      // Let axios set Content-Type automatically with boundary
       const response = await API.patch(
         `/api/shop/products/${product.id}/`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        formData
       );
 
       console.log("API Response:", response.data);
@@ -103,7 +101,15 @@ function EditProduct({ product, refetch }) {
         message.error("Image must be smaller than 5MB!");
         return false;
       }
-      setFileList([file]);
+      // Fixed: Store as an object with originFileObj property
+      setFileList([
+        {
+          uid: file.uid || Date.now().toString(),
+          name: file.name,
+          status: "done",
+          originFileObj: file,
+        },
+      ]);
       return false;
     },
     fileList,
@@ -127,25 +133,16 @@ function EditProduct({ product, refetch }) {
         footer={null}
         width={600}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-        >
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
             label="Product Name"
             name="name"
-            rules={[
-              { required: true, message: "Please enter product name" },
-            ]}
+            rules={[{ required: true, message: "Please enter product name" }]}
           >
             <Input placeholder="Enter product name" size="large" />
           </Form.Item>
 
-          <Form.Item
-            label="Description"
-            name="description"
-          >
+          <Form.Item label="Description" name="description">
             <Input.TextArea
               placeholder="Enter product description"
               rows={3}
@@ -188,34 +185,16 @@ function EditProduct({ product, refetch }) {
               name="uom"
               rules={[{ required: true, message: "Please enter UOM" }]}
             >
-               <Select
-    placeholder="Select a uom"
-    options={[
-      {
-        value: 'pcs',
-        label: 'Pcs',
-      },
-      {
-        value: 'kg',
-        label: 'KG',
-      },
-      {
-        value: 'litre',
-        label: 'Litre',
-      },
-      {
-        value: "box",
-        label: "Box"
-      },
-      {
-        value: "pack",
-        label: "Pack"
-      }
-    ]}
-  />
-
-
-
+              <Select
+                placeholder="Select a uom"
+                options={[
+                  { value: "pcs", label: "Pcs" },
+                  { value: "kg", label: "KG" },
+                  { value: "litre", label: "Litre" },
+                  { value: "box", label: "Box" },
+                  { value: "pack", label: "Pack" },
+                ]}
+              />
             </Form.Item>
 
             <Form.Item label="Status" name="is_active" valuePropName="checked">

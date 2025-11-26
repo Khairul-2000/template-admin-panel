@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export const BASE_URL = "http://10.10.7.76:14009";
+export const BASE_URL = "https://api.orderwithpluto.com";
 
 export const API = axios.create({
   baseURL: BASE_URL,

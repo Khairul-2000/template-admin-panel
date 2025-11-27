@@ -19,6 +19,12 @@ import { API, useAllProducts } from "../../api/api";
 import { useState } from "react";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
+import { Switch } from 'antd';
+
+const onChange = (checked) => {
+  console.log(`switch to ${checked}`);
+};
+
 
 function Products() {
   const [filter, setFilter] = useState({
@@ -100,6 +106,14 @@ function Products() {
       dataIndex: "seller",
       key: "seller",
       render: (seller) => <span>{seller || "N/A"}</span>,
+    },
+    {
+      title: <span>Best Offer</span>,
+      dataIndex: "is_best_offer",
+      key: "is_best_offer",
+      render: (is_best_offer) => <Switch defaultChecked={is_best_offer} onChange={onChange} />,
+      
+
     },
     {
       title: <span>Price</span>,

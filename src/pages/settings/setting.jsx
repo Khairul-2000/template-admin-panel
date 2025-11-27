@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Settings, Key, Wrench } from "lucide-react";
 import { API, useAuthCredential, useSiteStatus, updateCredentials } from "../../api/api";
+import { FiRefreshCcw } from "react-icons/fi";
+
 
 const Setting = () => {
   const { authCredential, isLoading, isError, error, refetch } =
@@ -10,7 +12,7 @@ const Setting = () => {
 
   const [credentials, setCredentials] = useState({
     OPENAI_API_KEY: "",
-    
+
   });
   const [showKeys, setShowKeys] = useState({
     OPENAI_API_KEY: false,
@@ -40,7 +42,7 @@ const Setting = () => {
     if (authCredential) {
       setCredentials({
         OPENAI_API_KEY: authCredential.OPENAI_API_KEY || "",
-    
+
       });
       setLastUpdated(Date(authCredential.updated_at) || "");
     }
@@ -83,6 +85,17 @@ const Setting = () => {
       setTempCredentials({});
     }
   };
+    // handle the vector database refresh
+  const handleDatabaseRefresh = async () => {
+    try {
+      // Call the API to refresh the database
+      await fetch("https://ai.orderwithpluto.com/initializedb");
+      alert("AI database refresh initiated successfully.");
+    } catch (err) {
+      console.error("Error refreshing AI database:", err);
+      alert("Failed to refresh AI database. Please try again.");
+    }
+  };
 
   // Cancel edit
   const handleCancel = () => {
@@ -94,6 +107,8 @@ const Setting = () => {
   const handleCredentialChange = (key, value) => {
     setTempCredentials(prev => ({ ...prev, [key]: value }));
   };
+
+
 
   // Toggle visibility for individual keys
   const toggleKeyVisibility = (key) => {
@@ -127,11 +142,10 @@ const Setting = () => {
             <div className="flex space-x-3 mt-4">
               <button
                 onClick={() => setActiveSection("api")}
-                className={`flex items-center px-4 py-2 rounded-md text-sm ${
-                  activeSection === "api"
+                className={`flex items-center px-4 py-2 rounded-md text-sm ${activeSection === "api"
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 <Key className="w-4 h-4 mr-2" />
                 API Management
@@ -139,11 +153,10 @@ const Setting = () => {
 
               <button
                 onClick={() => setActiveSection("system")}
-                className={`flex items-center px-4 py-2 rounded-md text-sm ${
-                  activeSection === "system"
+                className={`flex items-center px-4 py-2 rounded-md text-sm ${activeSection === "system"
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 <Wrench className="w-4 h-4 mr-2" />
                 System Settings
@@ -256,16 +269,27 @@ const Setting = () => {
 
                 <button
                   onClick={toggleMaintenanceMode}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-                    maintenanceMode ? "bg-orange-600" : "bg-gray-300"
-                  }`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${maintenanceMode ? "bg-orange-600" : "bg-gray-300"
+                    }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 bg-white rounded-full transform transition ${
-                      maintenanceMode ? "translate-x-6" : "translate-x-1"
-                    }`}
+                    className={`inline-block h-4 w-4 bg-white rounded-full transform transition ${maintenanceMode ? "translate-x-6" : "translate-x-1"
+                      }`}
                   ></span>
                 </button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-gray-50 border rounded-lg">
+                <div >
+                  <h3 className="font-medium">Refresh AI Database</h3>
+                  <p className="text-sm text-gray-500">
+                    Rebuild the AI database to incorporate recent changes
+                  </p>
+                </div>
+                <div>
+                  <button onClick={handleDatabaseRefresh} className="p-2 bg-gray-200 rounded-md hover:bg-gray-300 transition" ><FiRefreshCcw size={25}/>
+                  </button>
+                </div>
               </div>
 
               {/* Status Summary */}
@@ -288,4 +312,4 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+export default Setting 

@@ -318,6 +318,13 @@ export const useAuthCredential = () => {
   return { authCredential, isLoading, isError, error, refetch };
 };
 
+// update credentials (supports multiple fields)
+export const updateCredentials = async (credentialData) => {
+  const response = await API.patch("/api/auth/cretiential/update/", credentialData);
+  console.log(response.data, "response data");
+  return response.data;
+};
+
 // get Site Status
 export const useSiteStatus = () => {
   const getData = async () => {

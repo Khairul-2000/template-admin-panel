@@ -96,10 +96,16 @@ function Products() {
       render: (description) => <span>{description || "N/A"}</span>,
     },
     {
+      title: <span>Seller</span>,
+      dataIndex: "seller",
+      key: "seller",
+      render: (seller) => <span>{seller || "N/A"}</span>,
+    },
+    {
       title: <span>Price</span>,
       dataIndex: "price",
       key: "price",
-      render: (price) => <span className="font-semibold">৳{price}</span>,
+      render: (price) => <span className="font-semibold">£{price}</span>,
     },
     {
       title: <span>Stock</span>,

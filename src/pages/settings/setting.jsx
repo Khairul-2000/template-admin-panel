@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Settings, Key, Wrench } from "lucide-react";
-import { API, useAuthCredential, useSiteStatus } from "../../api/api";
+import { API, useAuthCredential, useSiteStatus, updateCredentials } from "../../api/api";
 
 const Setting = () => {
   const { authCredential, isLoading, isError, error, refetch } =
@@ -8,10 +8,17 @@ const Setting = () => {
 
   const { siteStatusData, refetch: refetchSiteStatus } = useSiteStatus();
 
-  const [apiKey, setApiKey] = useState("");
-  const [showKey, setShowKey] = useState(false);
+  const [credentials, setCredentials] = useState({
+    OPENAI_API_KEY: "",
+    
+  });
+  const [showKeys, setShowKeys] = useState({
+    OPENAI_API_KEY: false,
+
+
+  });
   const [isEditing, setIsEditing] = useState(false);
-  const [tempKey, setTempKey] = useState("");
+  const [tempCredentials, setTempCredentials] = useState({});
   const [lastUpdated, setLastUpdated] = useState("");
 
   const [activeSection, setActiveSection] = useState("api");
@@ -28,11 +35,14 @@ const Setting = () => {
     return `${start}${middle}${end}`;
   };
 
-  // Load API key + maintenance mode from backend
+  // Load credentials + maintenance mode from backend
   useEffect(() => {
-    if (authCredential?.OPENAI_API_KEY) {
-      setApiKey(maskApiKey(authCredential.OPENAI_API_KEY));
-      setLastUpdated(authCredential.updated_at);
+    if (authCredential) {
+      setCredentials({
+        OPENAI_API_KEY: authCredential.OPENAI_API_KEY || "",
+    
+      });
+      setLastUpdated(Date(authCredential.updated_at) || "");
     }
 
     if (siteStatusData?.is_maintenance_mode !== undefined) {
@@ -40,32 +50,54 @@ const Setting = () => {
     }
   }, [authCredential, siteStatusData]);
 
-  // Save API Key updates
+  // Save credentials updates
   const handleUpdate = async () => {
-    if (isEditing && tempKey) {
+    if (isEditing) {
       try {
-        await API.patch("/api/auth/cretiential/update/", {
-          OPENAI_API_KEY: tempKey,
-        });
+        // Filter out empty values - only send credentials that were actually changed
+        const updatedFields = Object.keys(tempCredentials).reduce((acc, key) => {
+          if (tempCredentials[key] && tempCredentials[key].trim() !== "") {
+            acc[key] = tempCredentials[key];
+          }
+          return acc;
+        }, {});
 
-        setApiKey(maskApiKey(tempKey));
+        if (Object.keys(updatedFields).length === 0) {
+          alert("Please enter at least one credential to update");
+          return;
+        }
+
+        await updateCredentials(updatedFields);
+
+        setCredentials(prev => ({ ...prev, ...updatedFields }));
         setLastUpdated("Just now");
         setIsEditing(false);
-        setTempKey("");
+        setTempCredentials({});
         refetch();
       } catch (err) {
-        console.error("Error updating API key:", err);
+        console.error("Error updating credentials:", err);
+        alert("Failed to update credentials. Please try again.");
       }
     } else {
       setIsEditing(true);
-      setTempKey("");
+      setTempCredentials({});
     }
   };
 
   // Cancel edit
   const handleCancel = () => {
     setIsEditing(false);
-    setTempKey("");
+    setTempCredentials({});
+  };
+
+  // Handle individual credential input change
+  const handleCredentialChange = (key, value) => {
+    setTempCredentials(prev => ({ ...prev, [key]: value }));
+  };
+
+  // Toggle visibility for individual keys
+  const toggleKeyVisibility = (key) => {
+    setShowKeys(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   // Update maintenance mode
@@ -124,72 +156,80 @@ const Setting = () => {
         {activeSection === "api" && (
           <div className="bg-white rounded-lg shadow-sm border">
             <div className="p-6 border-b">
-              <h1 className="text-2xl font-semibold">OpenAPI Management</h1>
-              <p className="text-gray-500">Manage your OpenAI API key securely</p>
+              <h1 className="text-2xl font-semibold">API Credentials Management</h1>
+              <p className="text-gray-500">Manage your API credentials securely</p>
             </div>
 
-            <div className="p-6">
-              <h3 className="text-base font-medium">OpenAI API Key</h3>
-
-              <div className="mt-4 flex items-center space-x-3">
-                <div className="flex-1 relative">
-                  {isEditing ? (
-                    <input
-                      type={showKey ? "text" : "password"}
-                      value={tempKey}
-                      onChange={(e) => setTempKey(e.target.value)}
-                      placeholder="Enter your API key"
-                      className="w-full px-3 py-2 bg-gray-50 border rounded-md font-mono text-sm focus:ring-2 focus:ring-blue-500"
-                    />
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <code className="px-3 py-2 bg-gray-100 rounded-md font-mono text-sm">
-                        {showKey
-                          ? authCredential?.OPENAI_API_KEY
-                          : apiKey}
-                      </code>
-
-                      <button
-                        onClick={() => setShowKey(!showKey)}
-                        className="p-2"
-                      >
-                        {showKey ? (
-                          <EyeOff className="w-6 h-6" />
-                        ) : (
-                          <Eye className="w-6 h-6" />
-                        )}
-                      </button>
-                    </div>
-                  )}
+            <div className="p-6 space-y-6">
+              {/* OpenAI API Key */}
+              <div>
+                <h3 className="text-base font-medium mb-3">OpenAI API Key</h3>
+                <div className="flex items-center space-x-3">
+                  <div className="flex-1 relative">
+                    {isEditing ? (
+                      <input
+                        type={showKeys.OPENAI_API_KEY ? "text" : "password"}
+                        value={tempCredentials.OPENAI_API_KEY || ""}
+                        onChange={(e) => handleCredentialChange("OPENAI_API_KEY", e.target.value)}
+                        placeholder="Enter OpenAI API key (leave empty to keep current)"
+                        className="w-full px-3 py-2 bg-gray-50 border rounded-md font-mono text-sm focus:ring-2 focus:ring-blue-500"
+                      />
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <code className="px-3 py-2 bg-gray-100 rounded-md font-mono text-sm flex-1 overflow-hidden text-ellipsis">
+                          {showKeys.OPENAI_API_KEY
+                            ? credentials.OPENAI_API_KEY || "Not set"
+                            : maskApiKey(credentials.OPENAI_API_KEY || "")}
+                        </code>
+                        <button
+                          onClick={() => toggleKeyVisibility("OPENAI_API_KEY")}
+                          className="p-2"
+                        >
+                          {showKeys.OPENAI_API_KEY ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
+
               {/* Status */}
-              <div className="mt-3 text-sm">
+              <div className="pt-4 border-t text-sm">
                 <span className="text-green-600 font-medium">● Active</span>
                 <span className="text-gray-500 ml-4">
-                  Last updated: {lastUpdated}
+                  Last updated: {lastUpdated || "Never"}
                 </span>
               </div>
 
               {/* Buttons */}
-              <div className="mt-4 flex space-x-2">
+              <div className="flex space-x-2">
                 <button
                   onClick={handleUpdate}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                 >
-                  {isEditing ? "Save" : "Update"}
+                  {isEditing ? "Save Changes" : "Update Credentials"}
                 </button>
 
                 {isEditing && (
                   <button
                     onClick={handleCancel}
-                    className="px-4 py-2 bg-gray-200 rounded-md"
+                    className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition"
                   >
                     Cancel
                   </button>
                 )}
               </div>
+
+              {isEditing && (
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-sm text-blue-800">
+                  <strong>Note:</strong> You can update one or multiple credentials at once. Leave fields empty to keep their current values.
+                </div>
+              )}
             </div>
           </div>
         )}

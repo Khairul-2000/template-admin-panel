@@ -20,8 +20,8 @@ import {
 } from "recharts";
 
 import { useDashboard, useEarnings, useLowStock } from "../../api/api";
-import FormattedBotMessage from "../../components/FormattedBotMessage";
-import { message } from "antd";
+
+
 
 const Dashboard = () => {
   const { dashboardData, isLoading, isError, error } = useDashboard();
@@ -264,7 +264,7 @@ const Dashboard = () => {
         </div>
 
         <div>
-  
+          
         </div>
       </div>
     </div>

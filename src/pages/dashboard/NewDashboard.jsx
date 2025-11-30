@@ -20,6 +20,8 @@ import {
 } from "recharts";
 
 import { useDashboard, useEarnings, useLowStock } from "../../api/api";
+import FormattedBotMessage from "../../components/FormattedBotMessage";
+import { message } from "antd";
 
 const Dashboard = () => {
   const { dashboardData, isLoading, isError, error } = useDashboard();
@@ -30,6 +32,7 @@ const Dashboard = () => {
 
   if (isLoading) return <p className="p-6">Loading...</p>;
   if (isError) return <p className="p-6 text-red-500">{error.message}</p>;
+
 
   const ordersChartData = dashboardData?.total_orders
     ? Object.keys(dashboardData.total_orders).map((month) => ({
@@ -260,7 +263,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div></div>
+        <div>
+  
+        </div>
       </div>
     </div>
   );

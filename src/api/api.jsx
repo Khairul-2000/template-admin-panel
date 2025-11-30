@@ -6,7 +6,7 @@ export const BASE_URL = "https://api.orderwithpluto.com";
 export const LOCAL_BASE_URL = "http://10.10.7.76:14009";
 
 export const API = axios.create({
-  baseURL: LOCAL_BASE_URL,
+  baseURL: BASE_URL,
 });
 
 API.interceptors.request.use((config) => {

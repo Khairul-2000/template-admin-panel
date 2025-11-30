@@ -4,11 +4,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import { MdOutlineAdminPanelSettings, MdOutlinePostAdd } from "react-icons/md";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
-import { MdSell } from "react-icons/md";
-
 import orderIcon from "../assets/order.png";
 
-import { RiUserCommunityFill } from "react-icons/ri";
+
 
 // import { signOutAdmin, useAdminDashboard } from "../api/api";
 
@@ -48,11 +46,6 @@ const Sidebar = ({ onClick }) => {
       label: <Link to="/">Dashboard</Link>,
     },
 
-    // {
-    //   key: "user-management",
-    //   icon: <FaUsers />,
-    //   label: <Link to="/user-management">User Management</Link>,
-    // },
 
     ...(isSuperAdmin
       ? [

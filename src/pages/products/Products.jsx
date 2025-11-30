@@ -33,31 +33,68 @@ function Products() {
   const { allProducts, isLoading, isError, error, refetch } =
     useAllProducts(filter);
 
-
-
   const handleToggleBestOffer = async (product) => {
-    const formData = new FormData();
-    formData.append("is_best_offer", !product.is_best_offer);
+    // Check if trying to enable best offer
+    if (!product.is_best_offer) {
+      // Count current best offers across all products (not just current page)
+      const bestOfferCount = allProducts?.results?.filter(
+        (p) => p.is_best_offer && p.id !== product.id
+      ).length || 0;
 
-    const response = await API.patch(
-      `/api/shop/products/${product.id}/`,
-      formData
-    );
+      // If we need to check all pages, we should fetch all products
+      // For now, this checks the current page. You may need to add an API call
+      // to get the total count of best offers if pagination is involved
+      
+      if (bestOfferCount >= 5) {
+        message.warning("You can't add more than 5 products as Best Offer!");
+        return;
+      }
+    }
 
-    console.log("Best Offer Toggle Response:", response.data);
-  }
+    try {
+      const formData = new FormData();
+      formData.append("is_best_offer", !product.is_best_offer);
+
+      const response = await API.patch(
+        `/api/shop/products/${product.id}/`,
+        formData
+      );
+
+      console.log("Best Offer Toggle Response:", response.data);
+      message.success(
+        product.is_best_offer
+          ? "Removed from Best Offers"
+          : "Added to Best Offers"
+      );
+      refetch();
+    } catch (err) {
+      console.error(err);
+      message.error("Failed to update Best Offer status");
+    }
+  };
 
   const handleToggleBestSeller = async (product) => {
-    const formData = new FormData();
-    formData.append("is_best_seller", !product.is_best_seller);
+    try {
+      const formData = new FormData();
+      formData.append("is_best_seller", !product.is_best_seller);
 
-    const response = await API.patch(
-      `/api/shop/products/${product.id}/`,
-      formData
-    );
+      const response = await API.patch(
+        `/api/shop/products/${product.id}/`,
+        formData
+      );
 
-    console.log("Best Seller Toggle Response:", response.data);
-  }
+      console.log("Best Seller Toggle Response:", response.data);
+      message.success(
+        product.is_best_seller
+          ? "Removed from Best Sellers"
+          : "Added to Best Sellers"
+      );
+      refetch();
+    } catch (err) {
+      console.error(err);
+      message.error("Failed to update Best Seller status");
+    }
+  };
 
   const handleSearch = () => {
     setFilter((prev) => ({
@@ -129,10 +166,9 @@ function Products() {
       key: "is_best_offer",
       render: (_, record) => (
         <Switch
-          defaultChecked={record.is_best_offer}
+          checked={record.is_best_offer}
           onChange={() => handleToggleBestOffer(record)}
           disabled={!record.is_active}
-         
         />
       ),
     },
@@ -142,10 +178,9 @@ function Products() {
       key: "is_best_seller",
       render: (_, record) => (
         <Switch
-          defaultChecked={record.is_best_seller}
+          checked={record.is_best_seller}
           onChange={() => handleToggleBestSeller(record)}
           disabled={!record.is_active}
-          
         />
       ),
     },

@@ -227,7 +227,7 @@ const Dashboard = () => {
                 <Line
                   type="monotone"
                   dataKey="orders"
-                  stroke="#FF6B6B"
+                  stroke="#B7B868"
                   strokeWidth={2}
                 />
               </LineChart>
@@ -252,7 +252,7 @@ const Dashboard = () => {
                 <Line
                   type="monotone"
                   dataKey="earnings"
-                  stroke="#10B981"
+                  stroke="#48ACF0"
                   strokeWidth={2}
                 />
               </LineChart>

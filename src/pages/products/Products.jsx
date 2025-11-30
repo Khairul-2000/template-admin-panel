@@ -21,11 +21,6 @@ import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import { Switch } from 'antd';
 
-const onChange = (checked) => {
-  console.log(`switch to ${checked}`);
-};
-
-
 function Products() {
   const [filter, setFilter] = useState({
     page: 1,
@@ -37,6 +32,32 @@ function Products() {
 
   const { allProducts, isLoading, isError, error, refetch } =
     useAllProducts(filter);
+
+
+
+  const handleToggleBestOffer = async (product) => {
+    const formData = new FormData();
+    formData.append("is_best_offer", !product.is_best_offer);
+
+    const response = await API.patch(
+      `/api/shop/products/${product.id}/`,
+      formData
+    );
+
+    console.log("Best Offer Toggle Response:", response.data);
+  }
+
+  const handleToggleBestSeller = async (product) => {
+    const formData = new FormData();
+    formData.append("is_best_seller", !product.is_best_seller);
+
+    const response = await API.patch(
+      `/api/shop/products/${product.id}/`,
+      formData
+    );
+
+    console.log("Best Seller Toggle Response:", response.data);
+  }
 
   const handleSearch = () => {
     setFilter((prev) => ({
@@ -101,19 +122,32 @@ function Products() {
       key: "description",
       render: (description) => <span>{description || "N/A"}</span>,
     },
-    {
-      title: <span>Seller</span>,
-      dataIndex: "seller",
-      key: "seller",
-      render: (seller) => <span>{seller || "N/A"}</span>,
-    },
+
     {
       title: <span>Best Offer</span>,
       dataIndex: "is_best_offer",
       key: "is_best_offer",
-      render: (is_best_offer) => <Switch defaultChecked={is_best_offer} onChange={onChange} />,
-      
-
+      render: (_, record) => (
+        <Switch
+          defaultChecked={record.is_best_offer}
+          onChange={() => handleToggleBestOffer(record)}
+          disabled={!record.is_active}
+         
+        />
+      ),
+    },
+    {
+      title: <span>Best Seller</span>,
+      dataIndex: "is_best_seller",
+      key: "is_best_seller",
+      render: (_, record) => (
+        <Switch
+          defaultChecked={record.is_best_seller}
+          onChange={() => handleToggleBestSeller(record)}
+          disabled={!record.is_active}
+          
+        />
+      ),
     },
     {
       title: <span>Price</span>,
@@ -178,7 +212,7 @@ function Products() {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-4 ">
         {/* Search Bar */}
         <div className="flex items-center gap-2">
           <Input

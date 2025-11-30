@@ -3,8 +3,10 @@ import axios from "axios";
 
 export const BASE_URL = "https://api.orderwithpluto.com";
 
+export const LOCAL_BASE_URL = "http://10.10.7.76:14009";
+
 export const API = axios.create({
-  baseURL: BASE_URL,
+  baseURL: LOCAL_BASE_URL,
 });
 
 API.interceptors.request.use((config) => {
@@ -168,28 +170,28 @@ export const createSeller = async (sellerData) => {
   return response.data;
 };
 
-// update seller
-export const updateSeller = async (sellerId, sellerData) => {
-  const formData = new FormData();
-  formData.append("title", sellerData.title);
-  formData.append("description", sellerData.description);
-  if (sellerData.image && typeof sellerData.image !== 'string') {
-    formData.append("image", sellerData.image);
-  }
+// // update seller
+// export const updateSeller = async (sellerId, sellerData) => {
+//   const formData = new FormData();
+//   formData.append("title", sellerData.title);
+//   formData.append("description", sellerData.description);
+//   if (sellerData.image && typeof sellerData.image !== 'string') {
+//     formData.append("image", sellerData.image);
+//   }
 
-  const response = await API.put(`/api/shop/sellers/${sellerId}/`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return response.data;
-};
+//   const response = await API.put(`/api/shop/sellers/${sellerId}/`, formData, {
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//     },
+//   });
+//   return response.data;
+// };
 
-// delete seller
-export const deleteSeller = async (sellerId) => {
-  const response = await API.delete(`/api/shop/sellers/${sellerId}/`);
-  return response.data;
-};
+// // delete seller
+// export const deleteSeller = async (sellerId) => {
+//   const response = await API.delete(`/api/shop/sellers/${sellerId}/`);
+//   return response.data;
+// };
 
 
 // get all food-orders
@@ -280,6 +282,8 @@ export const useAllProducts = ({ page = 1, limit = 10, search }) => {
       },
     });
 
+    console.log(response.data, "response data");
+
     return response.data;
   };
 
@@ -329,6 +333,8 @@ export const updateCredentials = async (credentialData) => {
 export const useSiteStatus = () => {
   const getData = async () => {
     const response = await API.get("/api/auth/site/status/");
+
+    console.log("Site Status Response:", response.data);
     return response.data;
   };
 

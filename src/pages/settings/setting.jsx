@@ -25,6 +25,9 @@ const Setting = () => {
 
   const [activeSection, setActiveSection] = useState("api");
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [maintenanceImage, setMaintenanceImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   // Mask API key
   const maskApiKey = (key) => {
@@ -85,7 +88,7 @@ const Setting = () => {
       setTempCredentials({});
     }
   };
-    // handle the vector database refresh
+  // handle the vector database refresh
   const handleDatabaseRefresh = async () => {
     try {
       // Call the API to refresh the database
@@ -115,7 +118,83 @@ const Setting = () => {
     setShowKeys(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // Update maintenance mode
+  // // Update maintenance mode
+  // const toggleMaintenanceMode = async () => {
+  //   try {
+  //     await API.patch("/api/auth/site/status/update/", {
+  //       is_maintenance_mode: !maintenanceMode,
+
+
+  //     });
+
+  //     setMaintenanceMode(!maintenanceMode);
+  //     refetchSiteStatus();
+  //   } catch (err) {
+  //     console.error("Error updating maintenance mode:", err);
+  //   }
+  // };
+
+  // Handle image file selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid image file (SVG, PNG, JPG, or GIF)');
+        return;
+      }
+
+      // Validate file size (e.g., max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+
+      setMaintenanceImage(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Upload maintenance image separately
+  const handleUploadMaintenanceImage = async () => {
+    if (!maintenanceImage) {
+      alert('Please select an image first');
+      return;
+    }
+
+    setIsUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('poster', maintenanceImage);
+
+      await API.patch("/api/auth/site/status/update/", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      alert('Maintenance image uploaded successfully!');
+      refetchSiteStatus();
+
+      // Clear image after successful upload
+      setMaintenanceImage(null);
+      setImagePreview(null);
+    } catch (err) {
+      console.error("Error uploading maintenance image:", err);
+      alert("Failed to upload maintenance image. Please try again.");
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  // Toggle maintenance mode only (without image)
   const toggleMaintenanceMode = async () => {
     try {
       await API.patch("/api/auth/site/status/update/", {
@@ -126,6 +205,7 @@ const Setting = () => {
       refetchSiteStatus();
     } catch (err) {
       console.error("Error updating maintenance mode:", err);
+      alert("Failed to update maintenance mode. Please try again.");
     }
   };
 
@@ -143,8 +223,8 @@ const Setting = () => {
               <button
                 onClick={() => setActiveSection("api")}
                 className={`flex items-center px-4 py-2 rounded-md text-sm ${activeSection === "api"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 hover:bg-gray-200"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 hover:bg-gray-200"
                   }`}
               >
                 <Key className="w-4 h-4 mr-2" />
@@ -154,8 +234,8 @@ const Setting = () => {
               <button
                 onClick={() => setActiveSection("system")}
                 className={`flex items-center px-4 py-2 rounded-md text-sm ${activeSection === "system"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 hover:bg-gray-200"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 hover:bg-gray-200"
                   }`}
               >
                 <Wrench className="w-4 h-4 mr-2" />
@@ -258,7 +338,7 @@ const Setting = () => {
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Maintenance Mode */}
+              {/* Maintenance Mode Toggle */}
               <div className="flex items-center justify-between p-4 bg-gray-50 border rounded-lg">
                 <div>
                   <h3 className="font-medium">Maintenance Mode</h3>
@@ -279,31 +359,89 @@ const Setting = () => {
                 </button>
               </div>
 
+              {/* Refresh AI Database */}
               <div className="flex items-center justify-between p-4 bg-gray-50 border rounded-lg">
-                <div >
+                <div>
                   <h3 className="font-medium">Refresh AI Database</h3>
                   <p className="text-sm text-gray-500">
                     Rebuild the AI database to incorporate recent changes
                   </p>
                 </div>
                 <div>
-                  <button onClick={handleDatabaseRefresh} className="p-2 bg-gray-200 rounded-md hover:bg-gray-300 transition" ><FiRefreshCcw size={25}/>
+                  <button
+                    onClick={handleDatabaseRefresh}
+                    className="p-2 bg-gray-200 rounded-md hover:bg-gray-300 transition"
+                  >
+                    <FiRefreshCcw size={25} />
                   </button>
                 </div>
               </div>
 
-              {/* Status Summary */}
-              <div className="p-4 bg-blue-50 border rounded-lg">
-                <h4 className="text-sm font-medium text-blue-900">
-                  Current Status
-                </h4>
-                <p className="text-sm text-blue-700 mt-1">
-                  • Maintenance Mode:{" "}
-                  <span className="font-medium">
-                    {maintenanceMode ? "Active" : "Inactive"}
-                  </span>
-                </p>
+              {/* Maintenance Image Upload */}
+              <div className="p-4 bg-gray-50 border rounded-lg">
+                <div className="mb-4">
+                  <h3 className="font-medium">Maintenance Image</h3>
+                  <p className="text-sm text-gray-500">
+                    Upload an image to display during maintenance mode
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    className="block mb-2 text-sm font-medium text-gray-700"
+                    htmlFor="file_input"
+                  >
+                    Select Image
+                  </label>
+
+                  <input
+                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    id="file_input"
+                    type="file"
+                    accept="image/svg+xml,image/png,image/jpeg,image/jpg,image/gif"
+                    onChange={handleImageChange}
+                  />
+
+                  <p className="mt-1 text-xs text-gray-500">
+                    SVG, PNG, JPG or GIF (MAX. 5MB)
+                  </p>
+
+                  {/* Image Preview */}
+                  {imagePreview && (
+                    <div className="mt-4">
+                      <p className="text-sm text-gray-600 mb-2 font-medium">Preview:</p>
+                      <img
+                        src={imagePreview}
+                        alt="Maintenance preview"
+                        className="w-full max-w-md h-48 object-contain rounded-lg border bg-white p-2"
+                      />
+                      <div className="flex space-x-2 mt-3">
+                        <button
+                          onClick={handleUploadMaintenanceImage}
+                          disabled={isUploadingImage}
+                          className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        >
+                          {isUploadingImage ? "Uploading..." : "Upload Image"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setMaintenanceImage(null);
+                            setImagePreview(null);
+                          }}
+                          disabled={isUploadingImage}
+                          className="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded-md hover:bg-gray-300 transition disabled:cursor-not-allowed"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
+              
+
+
+
             </div>
           </div>
         )}

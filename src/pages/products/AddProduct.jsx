@@ -35,7 +35,7 @@ function AddProduct({ refetch }) {
       formData.append("price", values.price);
       formData.append("stock", values.stock);
       formData.append("uom", values.uom);
-      formData.append("seller", values.seller);
+      
       formData.append("is_active", values.is_active ? true : false);
 
       // Fixed: Access the file correctly
@@ -194,20 +194,7 @@ function AddProduct({ refetch }) {
             </Form.Item>
           </div>
 
-          <Form.Item
-            label="Seller"
-            name="seller"
-            rules={[{ required: true, message: "Please enter Seller" }]}
-          >
-            <Select
-              placeholder="Select a seller"
-              options={allSellers?.map((seller) => ({
-                value: seller.id,
-                label: seller.title,
-              }))}
-            />
-          </Form.Item>
-
+          
           <Form.Item label="Product Image">
             <Upload {...uploadProps} listType="picture">
               <Button icon={<UploadOutlined />}>Select Image</Button>

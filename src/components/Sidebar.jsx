@@ -75,11 +75,7 @@ const Sidebar = ({ onClick }) => {
       label: <Link to="/products">Products</Link>,
     },
     
-    {
-      key: "sellers",
-      icon: <MdSell className="!text-xl" />,
-      label: <Link to="/sellers">Sellers</Link>,
-    },
+
 
     {
       key: "settings",

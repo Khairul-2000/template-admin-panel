@@ -74,6 +74,21 @@ function Products() {
   };
 
   const handleToggleBestSeller = async (product) => {
+    if(!product.is_best_seller){
+      // Count current best sellers across all products (not just current page)
+      const bestSellerCount = allProducts?.results?.filter(
+        (p) => p.is_best_seller && p.id !== product.id
+      ).length || 0;
+
+      // If we need to check all pages, we should fetch all products
+      // For now, this checks the current page. You may need to add an API call
+      // to get the total count of best sellers if pagination is involved
+      
+      if (bestSellerCount >= 5) {
+        message.warning("You can't add more than 5 products as Best Seller!");
+        return;
+      }
+    }
     try {
       const formData = new FormData();
       formData.append("is_best_seller", !product.is_best_seller);

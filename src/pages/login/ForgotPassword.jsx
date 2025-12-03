@@ -15,7 +15,7 @@ const ForgotPassword = () => {
         email: values.email,
       });
 
-      console.log("response", response);
+      // console.log("response", response);
 
       // If successful, save the token in localStorage
       localStorage.setItem("email", values.email);
@@ -25,7 +25,7 @@ const ForgotPassword = () => {
 
       navigate("/check-code");
     } catch (error) {
-      console.log(error, "error");
+      // console.log(error, "error");
       // Show error message
       message.error(
         "Send code on your email failed. Please try again." // error.response?.data?.message

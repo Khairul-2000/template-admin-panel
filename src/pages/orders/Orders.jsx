@@ -97,7 +97,7 @@ function ProductOrders() {
           editDeliveryFee,
       };
 
-      console.log("Updated order data:", updatedOrder);
+      // console.log("Updated order data:", updatedOrder);
 
       message.success("Order updated successfully!");
       setIsEditModalOpen(false);
@@ -148,8 +148,8 @@ function ProductOrders() {
         `/api/shop/admin/orders/update/${selectedStatus.id}/`,
         payload
       );
-
-      console.log("res", res);
+// 
+      // console.log("res", res);
 
       message.success("User status updated successfully!");
       setIsStatusModalOpen(false);
@@ -157,7 +157,7 @@ function ProductOrders() {
       setNewStatus("");
       refetch();
     } catch (err) {
-      console.log(err, "error");
+      // console.log(err, "error");
       message.error(
         err.response?.data?.error || "Failed to update User status"
       );

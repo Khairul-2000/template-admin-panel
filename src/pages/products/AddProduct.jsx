@@ -24,9 +24,9 @@ function AddProduct({ refetch }) {
   const handleSubmit = async (values) => {
     setLoading(true);
 
-    console.log("Form Values:", values);
-    console.log("File List:", fileList);
-    console.log("Image File:", fileList[0]?.originFileObj);
+    // console.log("Form Values:", values);
+    // console.log("File List:", fileList);
+    // console.log("Image File:", fileList[0]?.originFileObj);
 
     try {
       const formData = new FormData();
@@ -46,13 +46,13 @@ function AddProduct({ refetch }) {
 
       // Console log all form data
       for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
+        // console.log(pair[0] + ": " + pair[1]);
       }
 
       // Let axios set Content-Type automatically with boundary
       const response = await API.post("/api/shop/products/", formData);
 
-      console.log("API Response:", response.data);
+      // console.log("API Response:", response.data);
 
       message.success("Product added successfully!");
       refetch?.();
@@ -95,7 +95,7 @@ function AddProduct({ refetch }) {
     maxCount: 1,
   };
 
-  console.log("allSellers", allSellers);
+  // console.log("allSellers", allSellers);
 
   return (
     <>

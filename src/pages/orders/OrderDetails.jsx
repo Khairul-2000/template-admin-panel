@@ -20,6 +20,8 @@ function OrderDetails({ singleData, isVisible, onClose }) {
     }
   );
 
+
+
   // Status color mapping
   const getStatusColor = (status) => {
     switch (status) {
@@ -150,6 +152,18 @@ function OrderDetails({ singleData, isVisible, onClose }) {
                   </Tag>
                 </div>
               </Col>
+             
+
+
+              <Col span={24}>
+                <div className="flex justify-between py-2  px-3 rounded mt-2">
+                  <span className="text-md">Delivery Charge:</span>
+                  <span className="text-md text-blue-600">
+                    £{singleOrder.delivery_charge}
+                  </span>
+                </div>
+              </Col>
+
 
               <Col span={24}>
                 <div className="flex justify-between py-2 bg-blue-50 px-3 rounded mt-2">

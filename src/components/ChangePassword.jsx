@@ -21,7 +21,7 @@ const ChangePassword = () => {
       message.success("Password changed successfully!");
       setIsModalOpen(false);
     } catch (err) {
-      console.log(err, "error");
+      // console.log(err, "error");
       message.error(err.response?.data?.detail || "Failed to change password");
     } finally {
       setLoading(false);

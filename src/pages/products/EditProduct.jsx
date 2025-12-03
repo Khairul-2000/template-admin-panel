@@ -33,7 +33,7 @@ function EditProduct({ product, refetch }) {
       ]);
     }
 
-    console.log("Editing Product:", product);
+    // console.log("Editing Product:", product);
   };
 
   const handleCancel = () => {
@@ -45,10 +45,10 @@ function EditProduct({ product, refetch }) {
   const handleSubmit = async (values) => {
     setLoading(true);
 
-    console.log("Updated Form Values:", values);
-    console.log("Product ID:", product.id);
-    console.log("File List:", fileList);
-    console.log("New Image File:", fileList[0]?.originFileObj);
+    // console.log("Updated Form Values:", values);
+    // console.log("Product ID:", product.id);
+    // console.log("File List:", fileList);
+    // console.log("New Image File:", fileList[0]?.originFileObj);
 
     try {
       const formData = new FormData();
@@ -67,7 +67,7 @@ function EditProduct({ product, refetch }) {
 
       // Console log all form data
       for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
+        // console.log(pair[0] + ": " + pair[1]);
       }
 
       // Let axios set Content-Type automatically with boundary
@@ -76,13 +76,13 @@ function EditProduct({ product, refetch }) {
         formData
       );
 
-      console.log("API Response:", response.data);
+      // console.log("API Response:", response.data);
 
       message.success("Product updated successfully!");
       refetch?.();
       handleCancel();
     } catch (err) {
-      console.error("Error:", err);
+      // console.error("Error:", err);
       message.error(err.response?.data?.error || "Failed to update product");
     } finally {
       setLoading(false);

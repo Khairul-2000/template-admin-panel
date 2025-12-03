@@ -60,7 +60,7 @@ function Products() {
         formData
       );
 
-      console.log("Best Offer Toggle Response:", response.data);
+      // console.log("Best Offer Toggle Response:", response.data);
       message.success(
         product.is_best_offer
           ? "Removed from Best Offers"
@@ -98,7 +98,7 @@ function Products() {
         formData
       );
 
-      console.log("Best Seller Toggle Response:", response.data);
+      // console.log("Best Seller Toggle Response:", response.data);
       message.success(
         product.is_best_seller
           ? "Removed from Best Sellers"
@@ -133,7 +133,7 @@ function Products() {
           message.success("Product deleted successfully!");
           refetch();
         } catch (err) {
-          console.log(err, "error");
+          // console.log(err, "error");
           message.error(
             err.response?.data?.error || "Failed to delete product"
           );

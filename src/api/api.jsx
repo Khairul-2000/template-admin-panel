@@ -282,7 +282,7 @@ export const useAllProducts = ({ page = 1, limit = 10, search }) => {
       },
     });
 
-    console.log(response.data, "response data");
+    // console.log(response.data, "response data");
 
     return response.data;
   };
@@ -325,7 +325,7 @@ export const useAuthCredential = () => {
 // update credentials (supports multiple fields)
 export const updateCredentials = async (credentialData) => {
   const response = await API.patch("/api/auth/cretiential/update/", credentialData);
-  console.log(response.data, "response data");
+    // console.log(response.data, "response data");
   return response.data;
 };
 
@@ -334,7 +334,7 @@ export const useSiteStatus = () => {
   const getData = async () => {
     const response = await API.get("/api/auth/site/status/");
 
-    console.log("Site Status Response:", response.data);
+    // console.log("Site Status Response:", response.data);
     return response.data;
   };
 

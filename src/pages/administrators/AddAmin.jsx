@@ -78,7 +78,7 @@ const AddAdmin = ({ refetch }) => {
         }
       );
 
-      console.log("response", response);
+      // console.log("response", response);
 
       message.success("Admin created successfully!");
       refetch?.();
@@ -87,7 +87,7 @@ const AddAdmin = ({ refetch }) => {
       setImageFile(null);
       setIsModalOpen(false);
     } catch (err) {
-      console.log(err, "error");
+      // console.log(err, "error");
       message.error(err.response?.data?.detail || "Failed to create admin");
     } finally {
       setLoading(false);

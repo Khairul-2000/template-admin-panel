@@ -29,7 +29,7 @@ const Login = () => {
       // Redirect to the admin dashboard (replace with your route)
       window.location.href = "/";
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       message.error(
         error?.response?.data?.error || "Login failed. Please try again."
       );

@@ -34,7 +34,7 @@ const CheckCode = () => {
         "Verification failed. Please try again.";
 
       message.error(errorMessage);
-      console.log(error, "error");
+      // console.log(error, "error");
     } finally {
       setLoading(false);
     }

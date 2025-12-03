@@ -18,7 +18,7 @@ const SetNewPassword = () => {
 
     setLoading(true); // Start loading when submitting form
     try {
-      console.log(values);
+      // console.log(values);
       const response = await API.post("/api/auth/set_new_password/", {
         email: localStorage.getItem("email"),
         code: localStorage.getItem("code"),
@@ -35,7 +35,7 @@ const SetNewPassword = () => {
       // Redirect to the admin dashboard (replace with your route)
       navigate("/");
     } catch (error) {
-      console.log(error, "error");
+      // console.log(error, "error");
       // Show error message
       message.error(
         "Password update failed. Please try again." // error.response?.data?.message

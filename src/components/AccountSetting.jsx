@@ -64,7 +64,7 @@ const AccountSetting = ({ adminProfile, refetch }) => {
       setImageFile(null);
       setIsModalOpen(false);
     } catch (err) {
-      console.log(err, "error");
+      // console.log(err, "error");
       message.error(err.response?.data?.detail || "Failed to update profile");
     } finally {
       setLoading(false);

@@ -55,13 +55,13 @@ const AdminEdit = ({ adminProfile, refetch }) => {
         formData.append("profile_picture", imageFile);
       }
 
-      console.log("Updating admin with data:", {
-        full_name: values.full_name,
-        email: values.email,
-        phone_number: values.phone_number,
-        role: values.role,
-        hasNewImage: !!imageFile,
-      });
+      // console.log("Updating admin with data:", {
+      //   full_name: values.full_name,
+      //   email: values.email,
+      //   phone_number: values.phone_number,
+      //   role: values.role,
+      //   hasNewImage: !!imageFile,
+      // });
 
       await API.put(`/api/user/profile/${adminProfile.id}/`, formData, {
         headers: {

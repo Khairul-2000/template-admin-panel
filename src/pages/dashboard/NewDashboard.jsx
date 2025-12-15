@@ -23,6 +23,7 @@ import { useDashboard, useEarnings, useLowStock } from "../../api/api";
 
 
 
+
 const Dashboard = () => {
   const { dashboardData, isLoading, isError, error } = useDashboard();
   const { earnsData } = useEarnings();
@@ -36,16 +37,16 @@ const Dashboard = () => {
 
   const ordersChartData = dashboardData?.total_orders
     ? Object.keys(dashboardData.total_orders).map((month) => ({
-        month,
-        orders: dashboardData.total_orders[month],
-      }))
+      month,
+      orders: dashboardData.total_orders[month],
+    }))
     : [];
 
   const earningsChartData = earnsData?.total_earnings
     ? Object.keys(earnsData.total_earnings).map((month) => ({
-        month,
-        earnings: earnsData.total_earnings[month],
-      }))
+      month,
+      earnings: earnsData.total_earnings[month],
+    }))
     : [];
 
   const monthOptions = [
@@ -143,7 +144,7 @@ const Dashboard = () => {
               >
                 {monthOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
-                    {opt.label} 
+                    {opt.label}
                   </option>
                 ))}
               </select>
@@ -264,9 +265,10 @@ const Dashboard = () => {
         </div>
 
         <div>
-          
+
         </div>
       </div>
+   
     </div>
   );
 };

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Eye, EyeOff, Settings, Key, Wrench } from "lucide-react";
 import { API, useAuthCredential, useSiteStatus, updateCredentials } from "../../api/api";
 import { FiRefreshCcw } from "react-icons/fi";
-import imageCompression from 'browser-image-compression';
 
 
 const Setting = () => {
@@ -136,84 +135,33 @@ const Setting = () => {
   // };
 
   // Handle image file selection
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     // Validate file type
-  //     const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
-  //     if (!validTypes.includes(file.type)) {
-  //       alert('Please upload a valid image file (SVG, PNG, JPG, or GIF)');
-  //       return;
-  //     }
-
-  //     // Validate file size (e.g., max 5MB)
-  //     if (file.size > 5 * 1024 * 1024) {
-  //       alert('File size must be less than 5MB');
-  //       return;
-  //     }
-
-  //     setMaintenanceImage(file);
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setImagePreview(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-  const handleImageChange = async (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    // Validate file type
-    const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
-    if (!validTypes.includes(file.type)) {
-      alert('Please upload a valid image file (SVG, PNG, JPG, or GIF)');
-      return;
-    }
-
-    // Validate file size (e.g., max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size must be less than 5MB');
-      return;
-    }
-
-    try {
-      // Skip compression for SVG
-      if (file.type === 'image/svg+xml') {
-        setMaintenanceImage(file);
-        const reader = new FileReader();
-        reader.onloadend = () => setImagePreview(reader.result);
-        reader.readAsDataURL(file);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid image file (SVG, PNG, JPG, or GIF)');
         return;
       }
 
-      // Compression options
-      const options = {
-        maxSizeMB: 0.1, // 100KB = 0.1MB
-        maxWidthOrHeight: 1920,
-        useWebWorker: true,
-        fileType: 'image/jpeg' // or keep original with file.type
-      };
+      // Validate file size (e.g., max 100kB)
+      if (file.size > 100 * 1024) {
+        alert('File size must be less than 100KB');
+        return;
+      }
 
-      const compressedFile = await imageCompression(file, options);
-      console.log(`Original: ${(file.size / 1024).toFixed(2)}KB, Compressed: ${(compressedFile.size / 1024).toFixed(2)}KB`);
-
-      setMaintenanceImage(compressedFile);
+      setMaintenanceImage(file);
 
       // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
       };
-      reader.readAsDataURL(compressedFile);
-    } catch (error) {
-      console.error('Error compressing image:', error);
-      alert('Failed to compress image. Please try another file.');
+      reader.readAsDataURL(file);
     }
-  }
-};
-
+  };
+  
   // Upload maintenance image separately
   const handleUploadMaintenanceImage = async () => {
     if (!maintenanceImage) {
